@@ -1,0 +1,12 @@
+# MileStone Tracker - Backend Dependencies
+
+# Web Framework
+fastapi==0.109.0
+uvicorn==0.27.0
+
+# Claude AI
+anthropic==0.18.1
+
+# File handling
+python-multipart==0.0.6
+aiofiles==23.2.1

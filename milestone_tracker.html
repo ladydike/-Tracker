@@ -1,0 +1,4025 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>■ Jihye's 업무 Tracker</title>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-primary: #0d1117;
+            --bg-secondary: #161b22;
+            --bg-tertiary: #21262d;
+            --bg-card: #1c2128;
+            --border-color: #30363d;
+            --text-primary: #e6edf3;
+            --text-secondary: #8b949e;
+            --text-muted: #6e7681;
+            --accent-blue: #58a6ff;
+            --accent-green: #3fb950;
+            --accent-purple: #a371f7;
+            --accent-orange: #d29922;
+            --accent-red: #f85149;
+            --accent-cyan: #39c5cf;
+            --gradient-1: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            --shadow-lg: 0 8px 30px rgba(0, 0, 0, 0.4);
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            font-family: 'Noto Sans KR', -apple-system, sans-serif;
+            background: var(--bg-primary);
+            color: var(--text-primary);
+            min-height: 100vh;
+            line-height: 1.6;
+        }
+
+        .bg-pattern {
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: 
+                radial-gradient(ellipse at 20% 20%, rgba(88, 166, 255, 0.08) 0%, transparent 50%),
+                radial-gradient(ellipse at 80% 80%, rgba(163, 113, 247, 0.08) 0%, transparent 50%);
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        .app-container {
+            display: flex;
+            min-height: 100vh;
+            position: relative;
+            z-index: 1;
+        }
+
+        /* Sidebar */
+        .sidebar {
+            width: 260px;
+            background: var(--bg-secondary);
+            border-right: 1px solid var(--border-color);
+            display: flex;
+            flex-direction: column;
+            position: fixed;
+            height: 100vh;
+            overflow-y: auto;
+        }
+
+        .logo {
+            padding: 20px;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .logo h1 {
+            font-size: 1.3rem;
+            font-weight: 700;
+            background: var(--gradient-1);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .logo p {
+            font-size: 0.7rem;
+            color: var(--text-muted);
+            margin-top: 4px;
+        }
+
+        .nav-section {
+            padding: 12px;
+        }
+
+        .nav-title {
+            font-size: 0.65rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            color: var(--text-muted);
+            margin-bottom: 8px;
+            padding-left: 12px;
+        }
+
+        .nav-item {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 10px 14px;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            color: var(--text-secondary);
+            font-size: 0.85rem;
+        }
+
+        .nav-item:hover {
+            background: var(--bg-tertiary);
+            color: var(--text-primary);
+        }
+
+        .nav-item.active {
+            background: rgba(88, 166, 255, 0.15);
+            color: var(--accent-blue);
+        }
+
+        .nav-item .badge {
+            margin-left: auto;
+            background: var(--bg-tertiary);
+            padding: 2px 8px;
+            border-radius: 10px;
+            font-size: 0.7rem;
+            font-family: 'JetBrains Mono', monospace;
+        }
+
+        .nav-item.active .badge {
+            background: rgba(88, 166, 255, 0.3);
+        }
+
+        .nav-subitem {
+            padding-left: 36px;
+            font-size: 0.8rem;
+        }
+
+        /* 접기/펼치기 폴더 */
+        .nav-folder {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 10px 14px;
+            border-radius: 6px;
+            cursor: pointer;
+            color: var(--text-secondary);
+            transition: all 0.15s;
+            font-size: 0.85rem;
+        }
+
+        .nav-folder:hover {
+            background: var(--bg-tertiary);
+            color: var(--text-primary);
+        }
+
+        .nav-folder .folder-toggle {
+            margin-left: auto;
+            font-size: 0.7rem;
+            transition: transform 0.2s;
+        }
+
+        .nav-folder.expanded .folder-toggle {
+            transform: rotate(90deg);
+        }
+
+        .nav-folder-children {
+            display: none;
+            flex-direction: column;
+        }
+
+        .nav-folder-children.show {
+            display: flex;
+        }
+
+        .nav-folder-children .nav-item {
+            padding-left: 36px;
+            font-size: 0.85rem;
+        }
+
+        /* Main Content */
+        .main-content {
+            flex: 1;
+            margin-left: 260px;
+            padding: 24px;
+            overflow-y: auto;
+        }
+
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 24px;
+            padding-bottom: 16px;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .header h2 {
+            font-size: 1.4rem;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .header-actions {
+            display: flex;
+            gap: 10px;
+        }
+
+        .btn {
+            padding: 8px 16px;
+            border-radius: 6px;
+            font-size: 0.85rem;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            border: none;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            font-family: inherit;
+        }
+
+        .btn-primary {
+            background: var(--gradient-1);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 4px 12px rgba(102, 126, 234, 0.4);
+        }
+
+        .btn-secondary {
+            background: var(--bg-tertiary);
+            color: var(--text-primary);
+            border: 1px solid var(--border-color);
+        }
+
+        .btn-secondary:hover {
+            border-color: var(--accent-blue);
+        }
+
+        /* Meeting Navigation */
+        .meeting-nav {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            background: var(--bg-tertiary);
+            border-radius: 12px;
+            padding: 12px 16px;
+            margin-bottom: 16px;
+            border: 1px solid var(--border-color);
+        }
+
+        .nav-arrow {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            background: var(--bg-secondary);
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            padding: 10px 16px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            color: var(--text-primary);
+            min-width: 160px;
+        }
+
+        .nav-arrow:hover:not(:disabled) {
+            border-color: var(--accent-blue);
+            background: rgba(88, 166, 255, 0.1);
+        }
+
+        .nav-arrow:disabled {
+            opacity: 0.4;
+            cursor: not-allowed;
+        }
+
+        .nav-arrow .arrow {
+            font-size: 1.2rem;
+            font-weight: bold;
+        }
+
+        .nav-arrow.prev { justify-content: flex-start; }
+        .nav-arrow.next { justify-content: flex-end; }
+
+        .nav-info {
+            display: flex;
+            flex-direction: column;
+            gap: 2px;
+        }
+
+        .nav-label {
+            font-size: 0.7rem;
+            color: var(--text-muted);
+            text-transform: uppercase;
+        }
+
+        .nav-date {
+            font-size: 0.85rem;
+            font-weight: 500;
+            color: var(--accent-blue);
+        }
+
+        .nav-current {
+            font-size: 0.9rem;
+            color: var(--text-secondary);
+            font-family: 'JetBrains Mono', monospace;
+        }
+
+        /* Action Items Tracker */
+        .action-tracker {
+            background: var(--bg-tertiary);
+            border-radius: 12px;
+            border: 1px solid var(--border-color);
+            margin-top: 20px;
+        }
+
+        .action-tracker-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 14px 18px;
+            border-bottom: 1px solid var(--border-color);
+            background: var(--bg-card);
+            border-radius: 12px 12px 0 0;
+        }
+
+        .action-tracker-header h4 {
+            font-size: 0.95rem;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .action-stats {
+            display: flex;
+            gap: 12px;
+        }
+
+        .stat-badge {
+            display: flex;
+            align-items: center;
+            gap: 4px;
+            font-size: 0.75rem;
+            padding: 4px 10px;
+            border-radius: 12px;
+            font-family: 'JetBrains Mono', monospace;
+        }
+
+        .stat-badge.completed {
+            background: rgba(63, 185, 80, 0.15);
+            color: var(--accent-green);
+        }
+
+        .stat-badge.in-progress {
+            background: rgba(88, 166, 255, 0.15);
+            color: var(--accent-blue);
+        }
+
+        .stat-badge.pending {
+            background: rgba(210, 153, 34, 0.15);
+            color: var(--accent-orange);
+        }
+
+        .action-list {
+            max-height: 400px;
+            overflow-y: auto;
+        }
+
+        .action-item {
+            display: flex;
+            align-items: flex-start;
+            gap: 12px;
+            padding: 14px 18px;
+            border-bottom: 1px solid var(--border-color);
+            transition: background 0.2s ease;
+        }
+
+        .action-item:last-child {
+            border-bottom: none;
+        }
+
+        .action-item:hover {
+            background: var(--bg-card);
+        }
+
+        .action-checkbox {
+            width: 20px;
+            height: 20px;
+            border-radius: 6px;
+            border: 2px solid var(--border-color);
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+            margin-top: 2px;
+            transition: all 0.2s ease;
+        }
+
+        .action-checkbox:hover {
+            border-color: var(--accent-blue);
+        }
+
+        .action-checkbox.completed {
+            background: var(--accent-green);
+            border-color: var(--accent-green);
+        }
+
+        .action-checkbox.completed::after {
+            content: '✓';
+            color: white;
+            font-size: 0.75rem;
+            font-weight: bold;
+        }
+
+        .action-checkbox.in-progress {
+            border-color: var(--accent-blue);
+            background: rgba(88, 166, 255, 0.2);
+        }
+
+        .action-checkbox.in-progress::after {
+            content: '◐';
+            color: var(--accent-blue);
+            font-size: 0.8rem;
+        }
+
+        .action-content {
+            flex: 1;
+        }
+
+        .action-text {
+            font-size: 0.85rem;
+            line-height: 1.5;
+            color: var(--text-primary);
+        }
+
+        .action-text.completed {
+            text-decoration: line-through;
+            color: var(--text-muted);
+        }
+
+        .action-meta {
+            display: flex;
+            gap: 10px;
+            margin-top: 6px;
+            font-size: 0.7rem;
+            color: var(--text-muted);
+        }
+
+        .action-meta .source {
+            color: var(--accent-blue);
+        }
+
+        .action-empty {
+            padding: 30px;
+            text-align: center;
+            color: var(--text-muted);
+            font-size: 0.85rem;
+        }
+
+        .action-status-menu {
+            position: relative;
+        }
+
+        .status-dropdown {
+            position: absolute;
+            top: 100%;
+            left: 0;
+            background: var(--bg-secondary);
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            padding: 4px;
+            z-index: 100;
+            display: none;
+            min-width: 120px;
+            box-shadow: var(--shadow-lg);
+        }
+
+        .status-dropdown.active {
+            display: block;
+        }
+
+        .status-option {
+            padding: 8px 12px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 0.8rem;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .status-option:hover {
+            background: var(--bg-tertiary);
+        }
+
+        /* Group Cards */
+        .groups-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 16px;
+            margin-bottom: 24px;
+        }
+
+        .group-card {
+            background: var(--bg-card);
+            border: 1px solid var(--border-color);
+            border-radius: 10px;
+            padding: 16px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .group-card:hover {
+            transform: translateY(-2px);
+            border-color: var(--accent-blue);
+            box-shadow: var(--shadow-lg);
+        }
+
+        .group-card .group-name {
+            font-size: 1rem;
+            font-weight: 600;
+            margin-bottom: 8px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .group-card .group-meta {
+            font-size: 0.8rem;
+            color: var(--text-muted);
+            display: flex;
+            gap: 12px;
+        }
+
+        /* Timeline */
+        .timeline-section {
+            background: var(--bg-card);
+            border: 1px solid var(--border-color);
+            border-radius: 10px;
+            padding: 20px;
+        }
+
+        .timeline-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 16px;
+            padding-bottom: 12px;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .timeline-header h3 {
+            font-size: 1.1rem;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .timeline {
+            position: relative;
+            padding-left: 20px;
+        }
+
+        .timeline::before {
+            content: "";
+            position: absolute;
+            left: 6px;
+            top: 0;
+            bottom: 0;
+            width: 2px;
+            background: var(--border-color);
+        }
+
+        .timeline-item {
+            position: relative;
+            padding: 12px 0 12px 16px;
+            cursor: pointer;
+            transition: all 0.2s;
+            border-radius: 6px;
+            margin-left: -8px;
+            padding-left: 24px;
+        }
+
+        .timeline-item:hover {
+            background: var(--bg-tertiary);
+        }
+
+        .timeline-item::before {
+            content: "";
+            position: absolute;
+            left: 0;
+            top: 18px;
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            background: var(--accent-blue);
+            border: 2px solid var(--bg-card);
+        }
+
+        .timeline-item .date {
+            font-size: 0.75rem;
+            color: var(--text-muted);
+            font-family: 'JetBrains Mono', monospace;
+        }
+
+        .timeline-item .title {
+            font-weight: 500;
+            margin: 4px 0;
+        }
+
+        .timeline-item .summary {
+            font-size: 0.8rem;
+            color: var(--text-secondary);
+            display: -webkit-box;
+            -webkit-line-clamp: 2;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+        }
+
+        /* Meeting Detail */
+        .meeting-detail {
+            display: none;
+        }
+
+        .meeting-detail.active {
+            display: block;
+        }
+
+        .meeting-content {
+            background: var(--bg-card);
+            border: 1px solid var(--border-color);
+            border-radius: 10px;
+            padding: 24px;
+        }
+
+        .meeting-content h4 {
+            margin-top: 20px;
+            margin-bottom: 10px;
+            color: var(--accent-blue);
+            font-size: 1rem;
+        }
+
+        .meeting-content ul {
+            padding-left: 20px;
+        }
+
+        .meeting-content li {
+            margin-bottom: 6px;
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+        }
+
+        .tag {
+            display: inline-block;
+            padding: 3px 10px;
+            border-radius: 4px;
+            font-size: 0.75rem;
+            background: var(--bg-tertiary);
+            color: var(--text-secondary);
+            margin-right: 6px;
+        }
+
+        /* Chat Panel */
+        .chat-panel {
+            position: fixed;
+            right: -420px;
+            top: 0;
+            width: 420px;
+            height: 100vh;
+            background: var(--bg-secondary);
+            border-left: 1px solid var(--border-color);
+            display: flex;
+            flex-direction: column;
+            transition: right 0.3s ease;
+            z-index: 100;
+        }
+
+        .chat-panel.active {
+            right: 0;
+        }
+
+        .chat-header {
+            padding: 16px;
+            border-bottom: 1px solid var(--border-color);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .chat-messages {
+            flex: 1;
+            overflow-y: auto;
+            padding: 16px;
+        }
+
+        .chat-message {
+            margin-bottom: 14px;
+        }
+
+        .chat-message.user {
+            text-align: right;
+        }
+
+        .chat-message .bubble {
+            display: inline-block;
+            max-width: 85%;
+            padding: 10px 14px;
+            border-radius: 14px;
+            font-size: 0.85rem;
+            line-height: 1.5;
+        }
+
+        .chat-message.user .bubble {
+            background: var(--gradient-1);
+            color: white;
+        }
+
+        .chat-message.assistant .bubble {
+            background: var(--bg-tertiary);
+        }
+
+        .answer-content {
+            line-height: 1.7;
+        }
+
+        .answer-content p {
+            margin: 0 0 8px 0;
+        }
+
+        .answer-content p:last-child {
+            margin-bottom: 0;
+        }
+
+        .chat-sources {
+            margin-top: 12px;
+            padding-top: 12px;
+            border-top: 1px solid var(--border-color);
+        }
+
+        .sources-label {
+            font-size: 0.75rem;
+            color: var(--text-muted);
+            margin-bottom: 8px;
+            font-weight: 500;
+        }
+
+        .sources-list {
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+        }
+
+        .source-item {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 8px 10px;
+            background: var(--bg-secondary);
+            border-radius: 6px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            font-size: 0.75rem;
+        }
+
+        .source-item:hover {
+            background: rgba(88, 166, 255, 0.1);
+            border-color: var(--accent-blue);
+        }
+
+        .source-date {
+            color: var(--accent-blue);
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.7rem;
+            white-space: nowrap;
+        }
+
+        .source-title {
+            flex: 1;
+            color: var(--text-primary);
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
+
+        .source-folder {
+            color: var(--text-muted);
+            font-size: 0.65rem;
+            background: var(--bg-tertiary);
+            padding: 2px 6px;
+            border-radius: 4px;
+        }
+
+        .loading-bubble {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            color: var(--text-muted);
+        }
+
+        .loading-dots span {
+            animation: blink 1.4s infinite both;
+        }
+
+        .loading-dots span:nth-child(2) {
+            animation-delay: 0.2s;
+        }
+
+        .loading-dots span:nth-child(3) {
+            animation-delay: 0.4s;
+        }
+
+        @keyframes blink {
+            0%, 80%, 100% { opacity: 0; }
+            40% { opacity: 1; }
+        }
+
+        .chat-input-area {
+            padding: 12px;
+            border-top: 1px solid var(--border-color);
+            display: flex;
+            gap: 8px;
+        }
+
+        .chat-input {
+            flex: 1;
+            padding: 10px 14px;
+            background: var(--bg-tertiary);
+            border: 1px solid var(--border-color);
+            border-radius: 20px;
+            color: var(--text-primary);
+            font-size: 0.85rem;
+            font-family: inherit;
+        }
+
+        .chat-input:focus {
+            outline: none;
+            border-color: var(--accent-blue);
+        }
+
+        .chat-send {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: var(--gradient-1);
+            border: none;
+            color: white;
+            cursor: pointer;
+        }
+
+        .close-btn {
+            background: none;
+            border: none;
+            color: var(--text-muted);
+            font-size: 1.3rem;
+            cursor: pointer;
+        }
+
+        .close-btn:hover {
+            color: var(--text-primary);
+        }
+
+        /* Empty State */
+        .empty-state {
+            text-align: center;
+            padding: 60px 20px;
+            color: var(--text-muted);
+        }
+
+        .empty-state .icon {
+            font-size: 3rem;
+            margin-bottom: 16px;
+        }
+
+        /* Notification */
+        .notification {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            padding: 12px 20px;
+            border-radius: 8px;
+            color: white;
+            font-weight: 500;
+            z-index: 9999;
+            animation: slideIn 0.3s ease;
+        }
+
+        @keyframes slideIn {
+            from { transform: translateX(100%); opacity: 0; }
+            to { transform: translateX(0); opacity: 1; }
+        }
+
+        .notification.success { background: var(--accent-green); }
+        .notification.error { background: var(--accent-red); }
+
+        /* Tab Bar */
+        .tab-bar {
+            border-bottom: 1px solid var(--border-color);
+            padding-bottom: 12px;
+        }
+
+        .tab-btn {
+            padding: 8px 16px;
+            border-radius: 6px;
+            font-size: 0.85rem;
+            font-weight: 500;
+            cursor: pointer;
+            background: var(--bg-tertiary);
+            color: var(--text-secondary);
+            border: 1px solid transparent;
+            font-family: inherit;
+            transition: all 0.2s;
+        }
+
+        .tab-btn:hover {
+            color: var(--text-primary);
+        }
+
+        .tab-btn.active {
+            background: rgba(88, 166, 255, 0.15);
+            color: var(--accent-blue);
+            border-color: var(--accent-blue);
+        }
+
+        /* Summary Content Styling */
+        .summary-result {
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+        }
+
+        /* Section Card */
+        .section-card {
+            background: var(--bg-card);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            overflow: hidden;
+            transition: border-color 0.2s ease;
+        }
+
+        .section-card:hover {
+            border-color: rgba(88, 166, 255, 0.3);
+        }
+
+        .section-card-header {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 14px 18px;
+            background: var(--bg-tertiary);
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .section-card-icon {
+            font-size: 1.1rem;
+        }
+
+        .section-card-title {
+            font-size: 0.95rem;
+            font-weight: 600;
+            color: var(--text-primary);
+            margin: 0;
+        }
+
+        .section-card-content {
+            padding: 18px;
+            line-height: 1.8;
+        }
+
+        /* Section Card Color Variants */
+        .section-card[data-type="overview"] .section-card-header {
+            background: linear-gradient(135deg, rgba(88, 166, 255, 0.1) 0%, rgba(88, 166, 255, 0.05) 100%);
+            border-left: 3px solid var(--accent-blue);
+        }
+
+        .section-card[data-type="detail"] .section-card-header {
+            background: linear-gradient(135deg, rgba(163, 113, 247, 0.1) 0%, rgba(163, 113, 247, 0.05) 100%);
+            border-left: 3px solid var(--accent-purple);
+        }
+
+        .section-card[data-type="risk"] .section-card-header {
+            background: linear-gradient(135deg, rgba(210, 153, 34, 0.1) 0%, rgba(210, 153, 34, 0.05) 100%);
+            border-left: 3px solid var(--accent-orange);
+        }
+
+        .section-card[data-type="action"] .section-card-header {
+            background: linear-gradient(135deg, rgba(63, 185, 80, 0.1) 0%, rgba(63, 185, 80, 0.05) 100%);
+            border-left: 3px solid var(--accent-green);
+        }
+
+        .section-card[data-type="followup"] .section-card-header {
+            background: linear-gradient(135deg, rgba(57, 197, 207, 0.1) 0%, rgba(57, 197, 207, 0.05) 100%);
+            border-left: 3px solid var(--accent-cyan);
+        }
+
+        /* Content inside section cards */
+        .section-card-content h3 {
+            color: var(--accent-purple);
+            font-size: 0.95rem;
+            margin: 16px 0 10px 0;
+            padding-bottom: 6px;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .section-card-content h3:first-child {
+            margin-top: 0;
+        }
+
+        .section-card-content ul, .section-card-content ol {
+            padding-left: 20px;
+            margin: 10px 0;
+        }
+
+        .section-card-content li {
+            margin-bottom: 8px;
+            color: var(--text-secondary);
+            line-height: 1.7;
+        }
+
+        .section-card-content li ul, .section-card-content li ol {
+            margin-top: 6px;
+            margin-bottom: 0;
+        }
+
+        .section-card-content strong {
+            color: var(--accent-orange);
+            font-weight: 600;
+        }
+
+        .section-card-content p {
+            margin: 10px 0;
+            color: var(--text-secondary);
+        }
+
+        .section-card-content blockquote {
+            border-left: 3px solid var(--accent-purple);
+            padding-left: 12px;
+            margin: 12px 0;
+            color: var(--text-muted);
+            font-style: italic;
+        }
+
+        /* Markdown Table Styles */
+        .section-card-content .md-table,
+        .md-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 16px 0;
+            font-size: 0.85rem;
+            background: var(--bg-tertiary);
+            border-radius: 8px;
+            overflow: hidden;
+        }
+
+        .md-table thead {
+            background: linear-gradient(135deg, rgba(88, 166, 255, 0.15) 0%, rgba(163, 113, 247, 0.1) 100%);
+        }
+
+        .md-table th {
+            padding: 12px 14px;
+            text-align: left;
+            font-weight: 600;
+            color: var(--text-primary);
+            border-bottom: 2px solid var(--border-color);
+            font-size: 0.8rem;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .md-table td {
+            padding: 10px 14px;
+            border-bottom: 1px solid var(--border-color);
+            color: var(--text-secondary);
+            line-height: 1.5;
+        }
+
+        .md-table tbody tr:last-child td {
+            border-bottom: none;
+        }
+
+        .md-table tbody tr:hover {
+            background: rgba(88, 166, 255, 0.05);
+        }
+
+        .md-table td strong {
+            color: var(--accent-orange);
+        }
+
+        .section-card-content h4 {
+            color: var(--accent-blue);
+            font-size: 0.9rem;
+            margin: 14px 0 8px 0;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .section-card-content h4::before {
+            content: '📌';
+            font-size: 0.85rem;
+        }
+
+        /* Highlight special items */
+        .section-card-content li:has(strong:first-child) {
+            color: var(--text-primary);
+        }
+
+        /* ==================== Dashboard Styles ==================== */
+        
+        /* Month Selector */
+        .month-selector {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            background: var(--bg-tertiary);
+            padding: 8px 16px;
+            border-radius: 8px;
+            border: 1px solid var(--border-color);
+        }
+
+        .month-nav {
+            background: none;
+            border: none;
+            color: var(--text-secondary);
+            cursor: pointer;
+            padding: 4px 8px;
+            font-size: 1rem;
+            transition: color 0.2s;
+        }
+
+        .month-nav:hover {
+            color: var(--accent-blue);
+        }
+
+        .current-month {
+            font-weight: 600;
+            font-size: 1rem;
+            min-width: 120px;
+            text-align: center;
+        }
+
+        /* Stats Row */
+        .stats-row {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 16px;
+            margin-bottom: 20px;
+        }
+
+        .stat-card {
+            background: var(--bg-card);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            padding: 20px;
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            transition: all 0.2s ease;
+        }
+
+        .stat-card:hover {
+            border-color: var(--accent-blue);
+            transform: translateY(-2px);
+        }
+
+        .stat-icon {
+            font-size: 2rem;
+            width: 50px;
+            height: 50px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: var(--bg-tertiary);
+            border-radius: 12px;
+        }
+
+        .stat-info {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .stat-value {
+            font-size: 1.8rem;
+            font-weight: 700;
+            font-family: 'JetBrains Mono', monospace;
+            color: var(--text-primary);
+        }
+
+        .stat-label {
+            font-size: 0.8rem;
+            color: var(--text-muted);
+        }
+
+        /* Dashboard Grid */
+        .dashboard-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+        }
+
+        .dashboard-left, .dashboard-right {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        .dashboard-card {
+            background: var(--bg-card);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            overflow: hidden;
+        }
+
+        .dashboard-card .card-header {
+            padding: 14px 18px;
+            background: var(--bg-tertiary);
+            border-bottom: 1px solid var(--border-color);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .dashboard-card .card-header h3 {
+            font-size: 0.95rem;
+            font-weight: 600;
+            margin: 0;
+        }
+
+        .dashboard-card .card-header .month-selector {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .dashboard-card .card-header .month-nav {
+            background: var(--bg-secondary);
+            border: 1px solid var(--border-color);
+            color: var(--text-primary);
+            width: 28px;
+            height: 28px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 0.8rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.2s;
+        }
+
+        .dashboard-card .card-header .month-nav:hover {
+            background: var(--accent-blue);
+            border-color: var(--accent-blue);
+            color: white;
+        }
+
+        .dashboard-card .card-header .current-month {
+            font-weight: 600;
+            font-size: 0.9rem;
+            min-width: 90px;
+            text-align: center;
+            color: var(--text-primary);
+        }
+
+        .dashboard-card .card-content {
+            padding: 18px;
+        }
+
+        /* Mini Calendar */
+        .mini-calendar {
+            display: grid;
+            grid-template-columns: repeat(7, 1fr);
+            gap: 4px;
+            text-align: center;
+        }
+
+        .mini-calendar .cal-header {
+            font-size: 0.7rem;
+            color: var(--text-muted);
+            padding: 8px 0;
+            font-weight: 500;
+        }
+
+        .mini-calendar .cal-day {
+            aspect-ratio: 1;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            border-radius: 8px;
+            font-size: 0.8rem;
+            cursor: pointer;
+            transition: all 0.2s;
+            position: relative;
+        }
+
+        .mini-calendar .cal-day:hover {
+            background: var(--bg-tertiary);
+        }
+
+        .mini-calendar .cal-day.today {
+            background: rgba(88, 166, 255, 0.2);
+            color: var(--accent-blue);
+            font-weight: 600;
+        }
+
+        .mini-calendar .cal-day .meeting-dots {
+            display: flex;
+            gap: 2px;
+            position: absolute;
+            bottom: 3px;
+            flex-wrap: wrap;
+            justify-content: center;
+            max-width: 90%;
+        }
+
+        .mini-calendar .cal-day .meeting-dot {
+            width: 5px;
+            height: 5px;
+            border-radius: 50%;
+            background: var(--accent-blue);
+        }
+
+        .mini-calendar .cal-day .meeting-dot.extra {
+            background: var(--accent-orange);
+        }
+
+        .mini-calendar .cal-day .worklog-dot {
+            width: 5px;
+            height: 5px;
+            border-radius: 2px;
+            background: var(--accent-green);
+        }
+
+        .mini-calendar .cal-day.has-worklog {
+            background: rgba(63, 185, 80, 0.1);
+        }
+
+        .mini-calendar .cal-day.other-month {
+            color: var(--text-muted);
+            opacity: 0.4;
+        }
+
+        .calendar-legend {
+            display: flex;
+            justify-content: center;
+            gap: 16px;
+            margin-top: 12px;
+            padding-top: 12px;
+            border-top: 1px solid var(--border-color);
+            font-size: 0.7rem;
+            color: var(--text-muted);
+        }
+
+        .calendar-legend .dot {
+            display: inline-block;
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            margin-right: 4px;
+        }
+
+        .calendar-legend .dot.high { background: var(--accent-orange); }
+        .calendar-legend .dot.medium { background: var(--accent-blue); }
+        .calendar-legend .dot.none { background: var(--border-color); }
+        .calendar-legend .dot.worklog { background: var(--accent-green); border-radius: 2px; }
+
+        /* Day Meetings Modal */
+        .day-meetings-modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.6);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 1000;
+            animation: fadeIn 0.2s;
+        }
+
+        .day-meetings-content {
+            background: var(--bg-secondary);
+            border-radius: 12px;
+            border: 1px solid var(--border-color);
+            width: 90%;
+            max-width: 400px;
+            max-height: 70vh;
+            overflow: hidden;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+        }
+
+        .day-meetings-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 16px 20px;
+            background: var(--bg-tertiary);
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .day-meetings-header h3 {
+            margin: 0;
+            font-size: 1rem;
+            font-weight: 600;
+        }
+
+        .day-meetings-close {
+            background: none;
+            border: none;
+            font-size: 1.5rem;
+            color: var(--text-muted);
+            cursor: pointer;
+            padding: 0;
+            line-height: 1;
+        }
+
+        .day-meetings-close:hover {
+            color: var(--text-primary);
+        }
+
+        .day-meetings-list {
+            padding: 8px;
+            overflow-y: auto;
+            max-height: 50vh;
+        }
+
+        .day-meeting-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 12px 16px;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: background 0.15s;
+        }
+
+        .day-meeting-item:hover {
+            background: var(--bg-tertiary);
+        }
+
+        .day-meeting-info {
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+        }
+
+        .day-meeting-title {
+            font-size: 0.9rem;
+            font-weight: 500;
+            color: var(--text-primary);
+        }
+
+        .day-meeting-folder {
+            font-size: 0.75rem;
+            color: var(--text-muted);
+        }
+
+        .day-meeting-badge {
+            font-size: 0.7rem;
+            padding: 4px 8px;
+            border-radius: 12px;
+            background: var(--bg-primary);
+            color: var(--text-secondary);
+        }
+
+        /* Day Detail Modal - 추가 스타일 */
+        .day-section {
+            padding: 12px 16px;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .day-section:last-of-type {
+            border-bottom: none;
+        }
+
+        .day-section-title {
+            font-size: 0.85rem;
+            font-weight: 600;
+            color: var(--text-primary);
+            margin-bottom: 10px;
+        }
+
+        .day-empty {
+            font-size: 0.8rem;
+            color: var(--text-muted);
+            padding: 8px 0;
+        }
+
+        .day-worklog-items {
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+        }
+
+        .day-worklog-item {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 0.85rem;
+            padding: 6px 0;
+        }
+
+        .day-worklog-status {
+            width: 18px;
+            text-align: center;
+            color: var(--text-muted);
+        }
+
+        .day-worklog-item.completed .day-worklog-status {
+            color: var(--accent-green);
+        }
+
+        .day-worklog-item.in_progress .day-worklog-status {
+            color: var(--accent-orange);
+        }
+
+        .day-worklog-item.completed .day-worklog-text {
+            text-decoration: line-through;
+            color: var(--text-muted);
+        }
+
+        .day-worklog-memo {
+            margin-top: 10px;
+            padding: 10px;
+            background: var(--bg-primary);
+            border-radius: 6px;
+            font-size: 0.8rem;
+        }
+
+        .day-worklog-memo .memo-label {
+            color: var(--text-secondary);
+        }
+
+        .day-worklog-memo .memo-text {
+            color: var(--text-primary);
+            margin-left: 4px;
+        }
+
+        .day-modal-actions {
+            padding: 12px 16px;
+            display: flex;
+            justify-content: center;
+        }
+
+        .day-edit-worklog-btn {
+            background: var(--accent-blue);
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 0.85rem;
+            transition: background 0.15s;
+        }
+
+        .day-edit-worklog-btn:hover {
+            background: #4a90d9;
+        }
+
+        /* Project Chart */
+        .project-chart {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .project-bar {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .project-name {
+            width: 100px;
+            font-size: 0.8rem;
+            color: var(--text-secondary);
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .project-bar-bg {
+            flex: 1;
+            height: 24px;
+            background: var(--bg-tertiary);
+            border-radius: 4px;
+            overflow: hidden;
+        }
+
+        .project-bar-fill {
+            height: 100%;
+            background: linear-gradient(90deg, var(--accent-blue), var(--accent-purple));
+            border-radius: 4px;
+            display: flex;
+            align-items: center;
+            justify-content: flex-end;
+            padding-right: 8px;
+            min-width: 30px;
+            transition: width 0.3s ease;
+        }
+
+        .project-bar-fill span {
+            font-size: 0.7rem;
+            font-weight: 600;
+            color: white;
+        }
+
+        .project-count {
+            width: 30px;
+            text-align: right;
+            font-size: 0.85rem;
+            font-family: 'JetBrains Mono', monospace;
+            color: var(--text-primary);
+        }
+
+        /* Work Log Styles */
+        .worklog-card .card-header {
+            background: linear-gradient(135deg, var(--bg-tertiary), rgba(88, 166, 255, 0.1));
+        }
+
+        .worklog-card .card-header .worklog-date-nav {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .worklog-card .card-header .worklog-date {
+            font-size: 0.8rem;
+            color: var(--text-primary);
+            font-weight: 500;
+            min-width: 90px;
+            text-align: center;
+        }
+
+        .worklog-nav-btn {
+            background: var(--bg-primary);
+            border: 1px solid var(--border-color);
+            color: var(--text-secondary);
+            width: 24px;
+            height: 24px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 0.7rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.15s;
+        }
+
+        .worklog-nav-btn:hover {
+            background: var(--accent-blue);
+            border-color: var(--accent-blue);
+            color: white;
+        }
+
+        .worklog-today-btn {
+            background: var(--bg-primary);
+            border: 1px solid var(--border-color);
+            color: var(--text-secondary);
+            padding: 4px 8px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 0.7rem;
+            margin-left: 4px;
+            transition: all 0.15s;
+        }
+
+        .worklog-today-btn:hover {
+            background: var(--accent-green);
+            border-color: var(--accent-green);
+            color: white;
+        }
+
+        .worklog-today-btn.active {
+            background: var(--accent-green);
+            border-color: var(--accent-green);
+            color: white;
+        }
+
+        .worklog-mode-toggle {
+            display: flex;
+            justify-content: flex-end;
+            margin-bottom: 12px;
+        }
+
+        .worklog-edit-btn {
+            background: var(--bg-primary);
+            border: 1px solid var(--border-color);
+            color: var(--text-secondary);
+            padding: 6px 12px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 0.8rem;
+            transition: all 0.15s;
+        }
+
+        .worklog-edit-btn:hover {
+            border-color: var(--accent-blue);
+            color: var(--accent-blue);
+        }
+
+        .worklog-edit-btn.editing {
+            background: var(--accent-blue);
+            border-color: var(--accent-blue);
+            color: white;
+        }
+
+        .worklog-input-area.hidden {
+            display: none;
+        }
+
+        .worklog-input-area {
+            display: flex;
+            gap: 8px;
+            margin-bottom: 16px;
+        }
+
+        .worklog-input {
+            flex: 1;
+            background: var(--bg-primary);
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            padding: 10px 14px;
+            font-size: 0.85rem;
+            color: var(--text-primary);
+            outline: none;
+            transition: border-color 0.2s;
+        }
+
+        .worklog-input:focus {
+            border-color: var(--accent-blue);
+        }
+
+        .worklog-input::placeholder {
+            color: var(--text-muted);
+        }
+
+        .worklog-add-btn {
+            background: var(--accent-blue);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            width: 40px;
+            height: 40px;
+            font-size: 1.2rem;
+            cursor: pointer;
+            transition: background 0.2s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .worklog-add-btn:hover {
+            background: #4a90d9;
+        }
+
+        .worklog-items {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            max-height: 200px;
+            overflow-y: auto;
+            margin-bottom: 16px;
+        }
+
+        .worklog-item {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 10px 12px;
+            background: var(--bg-primary);
+            border-radius: 8px;
+            border: 1px solid var(--border-color);
+            transition: all 0.15s;
+        }
+
+        .worklog-item:hover {
+            border-color: var(--accent-blue);
+        }
+
+        .worklog-status {
+            width: 24px;
+            height: 24px;
+            border-radius: 50%;
+            border: 2px solid var(--border-color);
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.7rem;
+            transition: all 0.2s;
+            flex-shrink: 0;
+        }
+
+        .worklog-status.pending {
+            border-color: var(--text-muted);
+            color: transparent;
+        }
+
+        .worklog-status.in_progress {
+            border-color: var(--accent-orange);
+            background: rgba(210, 153, 34, 0.2);
+            color: var(--accent-orange);
+        }
+
+        .worklog-status.completed {
+            border-color: var(--accent-green);
+            background: var(--accent-green);
+            color: white;
+        }
+
+        .worklog-content {
+            flex: 1;
+            font-size: 0.85rem;
+            color: var(--text-primary);
+            word-break: break-word;
+        }
+
+        .worklog-item.completed .worklog-content {
+            text-decoration: line-through;
+            color: var(--text-muted);
+        }
+
+        .worklog-delete {
+            background: none;
+            border: none;
+            color: var(--text-muted);
+            cursor: pointer;
+            padding: 4px;
+            font-size: 0.9rem;
+            opacity: 0;
+            transition: opacity 0.15s, color 0.15s;
+        }
+
+        .worklog-item:hover .worklog-delete {
+            opacity: 1;
+        }
+
+        .worklog-delete:hover {
+            color: #e74c3c;
+        }
+
+        .worklog-memo-area {
+            border-top: 1px solid var(--border-color);
+            padding-top: 12px;
+        }
+
+        .worklog-memo-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 8px;
+            font-size: 0.8rem;
+            color: var(--text-secondary);
+        }
+
+        .worklog-memo-toggle {
+            background: none;
+            border: none;
+            color: var(--text-muted);
+            cursor: pointer;
+            font-size: 0.7rem;
+            transition: transform 0.2s;
+        }
+
+        .worklog-memo-toggle.collapsed {
+            transform: rotate(-90deg);
+        }
+
+        .worklog-memo {
+            width: 100%;
+            min-height: 60px;
+            max-height: 120px;
+            background: var(--bg-primary);
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            padding: 10px 12px;
+            font-size: 0.8rem;
+            color: var(--text-primary);
+            resize: vertical;
+            outline: none;
+            font-family: inherit;
+            transition: border-color 0.2s;
+        }
+
+        .worklog-memo:focus {
+            border-color: var(--accent-blue);
+        }
+
+        .worklog-memo::placeholder {
+            color: var(--text-muted);
+        }
+
+        .worklog-memo.collapsed {
+            display: none;
+        }
+
+        .worklog-empty {
+            text-align: center;
+            padding: 20px;
+            color: var(--text-muted);
+            font-size: 0.85rem;
+        }
+
+        /* Recent Meetings */
+        .recent-meetings {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .recent-meeting-item {
+            display: flex;
+            align-items: flex-start;
+            gap: 12px;
+            padding: 12px;
+            background: var(--bg-tertiary);
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .recent-meeting-item:hover {
+            background: rgba(88, 166, 255, 0.1);
+        }
+
+        .recent-date {
+            font-size: 0.7rem;
+            color: var(--accent-blue);
+            font-family: 'JetBrains Mono', monospace;
+            white-space: nowrap;
+        }
+
+        .recent-info {
+            flex: 1;
+        }
+
+        .recent-title {
+            font-size: 0.85rem;
+            font-weight: 500;
+            color: var(--text-primary);
+            margin-bottom: 2px;
+        }
+
+        .recent-folder {
+            font-size: 0.7rem;
+            color: var(--text-muted);
+        }
+
+        /* Action Summary */
+        .action-summary {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .action-summary-stats {
+            display: flex;
+            gap: 16px;
+            padding-bottom: 12px;
+            margin-bottom: 12px;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .action-stat {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            font-size: 0.8rem;
+        }
+
+        .action-stat .dot {
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+        }
+
+        .action-stat .dot.pending { background: var(--accent-orange); }
+        .action-stat .dot.progress { background: var(--accent-blue); }
+        .action-stat .dot.done { background: var(--accent-green); }
+
+        .action-summary-list {
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+            max-height: 200px;
+            overflow-y: auto;
+        }
+
+        .action-summary-item {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 0.8rem;
+            padding: 8px 10px;
+            background: var(--bg-tertiary);
+            border-radius: 6px;
+        }
+
+        .action-summary-item .status-icon {
+            font-size: 0.9rem;
+        }
+
+        .action-summary-item .action-text {
+            flex: 1;
+            color: var(--text-secondary);
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
+
+        .action-summary-item .action-source {
+            font-size: 0.65rem;
+            color: var(--text-muted);
+        }
+
+        /* Loading Spinner */
+        .loading-spinner {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 60px;
+            color: var(--text-muted);
+        }
+
+        .spinner {
+            width: 40px;
+            height: 40px;
+            border: 3px solid var(--border-color);
+            border-top-color: var(--accent-blue);
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin-bottom: 16px;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        /* Meeting Type Badge */
+        .meeting-type-badge {
+            display: inline-block;
+            padding: 4px 10px;
+            border-radius: 12px;
+            font-size: 0.7rem;
+            font-weight: 500;
+            margin-left: 8px;
+        }
+
+        .meeting-type-badge.qna { background: rgba(163, 113, 247, 0.2); color: var(--accent-purple); }
+        .meeting-type-badge.s2 { background: rgba(88, 166, 255, 0.2); color: var(--accent-blue); }
+        .meeting-type-badge.default { background: rgba(139, 148, 158, 0.2); color: var(--text-secondary); }
+    </style>
+</head>
+<body>
+    <div class="bg-pattern"></div>
+    
+    <div class="app-container">
+        <!-- Sidebar -->
+        <aside class="sidebar">
+            <div class="logo">
+                <h1>■ Jihye's 업무 Tracker</h1>
+                <p>회의록 Follow-up 시스템</p>
+            </div>
+
+            <nav class="nav-section">
+                <div class="nav-item active" id="nav-dashboard" onclick="showDashboard()">
+                    <span>📊</span>
+                    <span>Dashboard</span>
+                </div>
+            </nav>
+
+            <nav class="nav-section">
+                <div class="nav-title">회의 폴더</div>
+                <div id="folder-nav">
+                    <!-- 폴더 네비게이션이 여기에 렌더링됨 -->
+                </div>
+            </nav>
+
+            <nav class="nav-section" style="margin-top: auto; border-top: 1px solid var(--border-color); padding-top: 12px;">
+                <div class="nav-item" id="open-chat">
+                    <span>🤖</span>
+                    <span>AI 어시스턴트</span>
+                </div>
+                <div class="nav-item" id="sync-btn">
+                    <span>🔄</span>
+                    <span>동기화</span>
+                </div>
+            </nav>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <!-- Dashboard View (메인 화면) -->
+            <div class="view" id="dashboard-view">
+                <div class="header">
+                    <h2>📊 월별 Dashboard</h2>
+                </div>
+
+                <!-- 메인 컨텐츠 그리드 -->
+                <div class="dashboard-grid">
+                    <!-- 왼쪽: 캘린더 + S2 프로젝트 현황 -->
+                    <div class="dashboard-left">
+                        <!-- 미니 캘린더 -->
+                        <div class="dashboard-card">
+                            <div class="card-header">
+                                <h3>📅 회의 캘린더</h3>
+                                <div class="month-selector">
+                                    <button class="month-nav" id="prev-month">◀</button>
+                                    <span class="current-month" id="current-month">2025년 12월</span>
+                                    <button class="month-nav" id="next-month">▶</button>
+                                </div>
+                            </div>
+                            <div class="card-content">
+                                <div class="mini-calendar" id="mini-calendar">
+                                    <!-- JS로 렌더링 -->
+                                </div>
+                                <div class="calendar-legend">
+                                    <span><i class="dot medium"></i> 회의</span>
+                                    <span><i class="dot high"></i> 4건+</span>
+                                    <span><i class="dot worklog"></i> 업무일지</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- S2 프로젝트별 현황 -->
+                        <div class="dashboard-card">
+                            <div class="card-header">
+                                <h3>🎮 프로젝트별 회의 현황</h3>
+                            </div>
+                            <div class="card-content">
+                                <div class="project-chart" id="project-chart">
+                                    <!-- JS로 렌더링 -->
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- 오른쪽: 업무일지 + 최근 회의 + 액션 아이템 -->
+                    <div class="dashboard-right">
+                        <!-- 업무일지 -->
+                        <div class="dashboard-card worklog-card">
+                            <div class="card-header">
+                                <h3>📝 업무일지</h3>
+                                <div class="worklog-date-nav">
+                                    <button class="worklog-nav-btn" id="worklog-prev-day">◀</button>
+                                    <span class="worklog-date" id="worklog-date">1월 16일 (목)</span>
+                                    <button class="worklog-nav-btn" id="worklog-next-day">▶</button>
+                                    <button class="worklog-today-btn" id="worklog-today-btn">오늘</button>
+                                </div>
+                            </div>
+                            <div class="card-content">
+                                <!-- 편집 모드 토글 -->
+                                <div class="worklog-mode-toggle">
+                                    <button class="worklog-edit-btn" id="worklog-edit-btn">✏️ 편집</button>
+                                </div>
+
+                                <!-- 업무 입력 (편집 모드에서만 표시) -->
+                                <div class="worklog-input-area" id="worklog-input-area">
+                                    <input type="text" class="worklog-input" id="worklog-input" placeholder="업무 내용을 입력하세요..." />
+                                    <button class="worklog-add-btn" id="worklog-add-btn">+</button>
+                                </div>
+                                
+                                <!-- 업무 목록 -->
+                                <div class="worklog-items" id="worklog-items">
+                                    <!-- JS로 렌더링 -->
+                                </div>
+
+                                <!-- 메모 영역 -->
+                                <div class="worklog-memo-area">
+                                    <div class="worklog-memo-header">
+                                        <span>💬 메모</span>
+                                        <button class="worklog-memo-toggle" id="worklog-memo-toggle">▼</button>
+                                    </div>
+                                    <textarea class="worklog-memo" id="worklog-memo" placeholder="메모를 입력하세요..."></textarea>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- 최근 회의록 -->
+                        <div class="dashboard-card">
+                            <div class="card-header">
+                                <h3>🔥 최근 회의록</h3>
+                            </div>
+                            <div class="card-content">
+                                <div class="recent-meetings" id="recent-meetings">
+                                    <!-- JS로 렌더링 -->
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- 액션 아이템 현황 -->
+                        <div class="dashboard-card">
+                            <div class="card-header">
+                                <h3>✅ 액션 아이템 현황</h3>
+                            </div>
+                            <div class="card-content">
+                                <div class="action-summary" id="action-summary">
+                                    <!-- JS로 렌더링 -->
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Folder View (그룹 목록) -->
+            <div class="view" id="folder-view" style="display: none;">
+                <div class="header">
+                    <h2 id="folder-title">📁 회의 폴더를 선택하세요</h2>
+                </div>
+                <div class="groups-grid" id="groups-grid">
+                    <div class="empty-state">
+                        <div class="icon">📂</div>
+                        <p>좌측에서 회의 폴더를 선택하세요</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Group Timeline View -->
+            <div class="view" id="group-view" style="display: none;">
+                <div class="header">
+                    <h2 id="group-title">그룹</h2>
+                    <div class="header-actions">
+                        <button class="btn btn-secondary" id="back-to-folder">
+                            ← 목록으로
+                        </button>
+                    </div>
+                </div>
+                
+                <!-- 액션 아이템 트래커 -->
+                <div class="action-tracker" id="action-tracker">
+                    <div class="action-tracker-header">
+                        <h4>📋 액션 아이템</h4>
+                        <div class="action-stats">
+                            <span class="stat-badge completed" id="stat-completed">✓ 0</span>
+                            <span class="stat-badge in-progress" id="stat-progress">◐ 0</span>
+                            <span class="stat-badge pending" id="stat-pending">○ 0</span>
+                        </div>
+                    </div>
+                    <div class="action-list" id="action-list">
+                        <div class="action-empty">
+                            액션 아이템을 불러오는 중...
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="timeline-section" style="margin-top: 20px;">
+                    <div class="timeline-header">
+                        <h3>📅 회의록 타임라인</h3>
+                        <span id="timeline-count" class="tag">0개</span>
+                    </div>
+                    <div class="timeline" id="group-timeline">
+                        <!-- 타임라인 아이템들 -->
+                    </div>
+                </div>
+            </div>
+
+            <!-- Meeting Detail View -->
+            <div class="view meeting-detail" id="meeting-detail-view">
+                <div class="header">
+                    <h2 id="meeting-detail-title">회의록 상세</h2>
+                    <div class="header-actions">
+                        <button class="btn btn-secondary" id="back-to-group">
+                            ← 돌아가기
+                        </button>
+                    </div>
+                </div>
+                
+                <!-- 이전/다음 회의 네비게이션 -->
+                <div class="meeting-nav" id="meeting-nav" style="display: none;">
+                    <button class="nav-arrow prev" id="prev-meeting-btn" disabled>
+                        <span class="arrow">←</span>
+                        <div class="nav-info">
+                            <span class="nav-label">이전 회의</span>
+                            <span class="nav-date" id="prev-meeting-date">-</span>
+                        </div>
+                    </button>
+                    <div class="nav-current">
+                        <span id="current-meeting-index">1</span> / <span id="total-meetings-count">1</span>
+                    </div>
+                    <button class="nav-arrow next" id="next-meeting-btn" disabled>
+                        <div class="nav-info">
+                            <span class="nav-label">다음 회의</span>
+                            <span class="nav-date" id="next-meeting-date">-</span>
+                        </div>
+                        <span class="arrow">→</span>
+                    </button>
+                </div>
+                
+                <!-- 탭 전환 -->
+                <div class="tab-bar" style="display: flex; gap: 8px; margin-bottom: 16px;">
+                    <button class="tab-btn active" data-tab="summary" id="tab-summary">
+                        ✨ AI 요약
+                    </button>
+                    <button class="tab-btn" data-tab="original" id="tab-original">
+                        📄 원본
+                    </button>
+                </div>
+                
+                <!-- AI 요약 탭 -->
+                <div class="tab-content" id="content-summary">
+                    <div class="meeting-content" id="summary-content">
+                        <div class="empty-state" id="summary-placeholder">
+                            <div class="icon">✨</div>
+                            <p>요약본을 불러오는 중입니다...</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- 원본 탭 -->
+                <div class="tab-content" id="content-original" style="display: none;">
+                    <div class="meeting-content" id="meeting-detail-content">
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <!-- Chat Panel -->
+    <div class="chat-panel" id="chat-panel">
+        <div class="chat-header">
+            <h3>🤖 AI 어시스턴트</h3>
+            <button class="close-btn" id="close-chat">×</button>
+        </div>
+        <div class="chat-messages" id="chat-messages">
+            <div class="chat-message assistant">
+                <div class="bubble">
+                    <strong>안녕하세요! 회의록 AI 어시스턴트입니다.</strong><br><br>
+                    업로드된 회의록을 기반으로 질문에 답변해드립니다.<br>
+                    답변 시 참고한 회의록 출처도 함께 표시됩니다.<br><br>
+                    <span style="color: var(--text-muted); font-size: 0.8rem;">
+                    예시 질문:<br>
+                    • "PalM 프로젝트 최근 현황은?"<br>
+                    • "EHG 마일스톤 일정 알려줘"<br>
+                    • "게임톡에서 논의된 내용 요약해줘"
+                    </span>
+                </div>
+            </div>
+        </div>
+        <div class="chat-input-area">
+            <input type="text" class="chat-input" id="chat-input" placeholder="질문을 입력하세요...">
+            <button class="chat-send" id="chat-send">➤</button>
+        </div>
+    </div>
+
+    <script>
+        // ==================== Data Store ====================
+        const store = {
+            meetings: [],
+            folders: {},        // 폴더별 회의록
+            groups: {},         // 폴더 내 그룹별 회의록
+            currentFolder: null,
+            currentGroup: null,
+            previousView: null
+        };
+
+        const API_BASE = 'http://localhost:8000';
+        let isServerConnected = false;
+
+        // ==================== 파일명 패턴에서 그룹 키 추출 ====================
+        const groupingPatterns = {
+            'S2_meeting': {
+                // yymmdd S2_[프로젝트명].txt
+                pattern: /S2_(.+?)\.txt$/i,
+                getGroupKey: (filename) => {
+                    const match = filename.match(/S2_(.+?)\.txt$/i);
+                    return match ? match[1] : null;
+                },
+                label: '프로젝트'
+            },
+            'MR_meeting': {
+                // yymmdd [프로젝트명]_킥오프_[유형].txt
+                pattern: /(\w+)_킥오프/,
+                getGroupKey: (filename) => {
+                    const match = filename.match(/(\w+)_킥오프/);
+                    return match ? match[1] : null;
+                },
+                label: '프로젝트'
+            },
+            '게임장르분석': {
+                // yymmdd 게임장르분석_[장르명].txt
+                pattern: /게임장르분석[_\s]*(.+?)\.txt$/i,
+                getGroupKey: (filename) => {
+                    const match = filename.match(/게임장르분석[_\s]*(.+?)\.txt$/i);
+                    return match ? match[1] : null;
+                },
+                label: '장르'
+            },
+            '101': {
+                // yymmdd [사람명] 101.txt 또는 yymmdd 101_[사람명].txt
+                pattern: /(?:(\S+)\s*101|101[_\s]*(\S+))\.txt$/i,
+                getGroupKey: (filename) => {
+                    // 숫자 제외하고 이름 추출
+                    const cleaned = filename.replace(/^\d+\s*/, '').replace(/\.txt$/i, '');
+                    const match1 = cleaned.match(/^(.+?)\s*101$/);
+                    const match2 = cleaned.match(/^101[_\s]*(.+)$/);
+                    return match1 ? match1[1] : (match2 ? match2[1] : null);
+                },
+                label: '담당자'
+            }
+        };
+
+        // 그룹 키가 없는 단일 시리즈 폴더들
+        const singleSeriesFolders = ['게임톡', 'Dashboard', 'Team weekly', 'Dept weekly', 'AI Study', 'MR Process'];
+
+        function getGroupKey(filename, folderPath) {
+            // 폴더 경로에서 마지막 폴더명 추출
+            const folderName = folderPath.split(/[\/\\]/).filter(Boolean).pop();
+            
+            // 단일 시리즈 폴더인 경우
+            if (singleSeriesFolders.some(f => folderPath.includes(f))) {
+                return '_single_'; // 모든 회의록을 하나의 그룹으로
+            }
+
+            // 패턴 매칭으로 그룹 키 추출
+            for (const [key, config] of Object.entries(groupingPatterns)) {
+                if (folderPath.includes(key)) {
+                    const groupKey = config.getGroupKey(filename);
+                    if (groupKey) return groupKey;
+                }
+            }
+
+            // 비정기회의 등 그룹화 불가능한 경우 파일명 자체를 키로
+            return filename.replace(/^\d+\s*/, '').replace(/\.txt$/i, '').trim() || filename;
+        }
+
+        // ==================== 데이터 로드 ====================
+        async function loadDataFromServer() {
+            try {
+                const response = await fetch(`${API_BASE}/api/meetings`);
+                if (!response.ok) throw new Error('Failed to load meetings');
+                
+                const meetings = await response.json();
+                store.meetings = meetings;
+                isServerConnected = true;
+
+                // 폴더별, 그룹별 정리
+                organizeMeetings();
+                renderFolderNav();
+                
+                // 대시보드 렌더링
+                renderDashboard();
+                
+                showNotification(`${meetings.length}개 회의록 로드 완료`, 'success');
+            } catch (error) {
+                console.error('Load error:', error);
+                isServerConnected = false;
+                showNotification('서버 연결 실패. python backend.py 실행 필요', 'error');
+            }
+        }
+
+        // ==================== Dashboard ====================
+        let currentDashboardDate = new Date();
+
+        function renderDashboard() {
+            updateMonthDisplay();
+            renderMiniCalendar();
+            renderProjectChart();
+            renderRecentMeetings();
+            renderActionSummary();
+            renderWorklog();
+        }
+
+        function updateMonthDisplay() {
+            const year = currentDashboardDate.getFullYear();
+            const month = currentDashboardDate.getMonth() + 1;
+            document.getElementById('current-month').textContent = `${year}년 ${month}월`;
+        }
+
+        function getMonthMeetings() {
+            const year = currentDashboardDate.getFullYear();
+            const month = currentDashboardDate.getMonth();
+            
+            return store.meetings.filter(m => {
+                const meetingDate = new Date(m.date);
+                return meetingDate.getFullYear() === year && meetingDate.getMonth() === month;
+            });
+        }
+
+        function renderMiniCalendar() {
+            const calendar = document.getElementById('mini-calendar');
+            const year = currentDashboardDate.getFullYear();
+            const month = currentDashboardDate.getMonth();
+            
+            // 월의 첫째 날과 마지막 날
+            const firstDay = new Date(year, month, 1);
+            const lastDay = new Date(year, month + 1, 0);
+            const startDay = firstDay.getDay(); // 0=일, 1=월...
+            
+            // 해당 월의 회의 날짜별 카운트
+            const monthMeetings = getMonthMeetings();
+            const meetingsByDay = {};
+            monthMeetings.forEach(m => {
+                const day = new Date(m.date).getDate();
+                meetingsByDay[day] = (meetingsByDay[day] || 0) + 1;
+            });
+
+            const today = new Date();
+            const isCurrentMonth = today.getFullYear() === year && today.getMonth() === month;
+
+            // 헤더
+            let html = ['일', '월', '화', '수', '목', '금', '토']
+                .map(d => `<div class="cal-header">${d}</div>`).join('');
+
+            // 빈 칸 (이전 달)
+            for (let i = 0; i < startDay; i++) {
+                html += `<div class="cal-day other-month"></div>`;
+            }
+
+            // 업무일지 데이터 가져오기
+            const worklogData = getWorklogData();
+
+            // 날짜
+            for (let day = 1; day <= lastDay.getDate(); day++) {
+                const count = meetingsByDay[day] || 0;
+                const isToday = isCurrentMonth && today.getDate() === day;
+                
+                // 해당 날짜에 업무일지가 있는지 확인
+                const dateKey = `${year}-${String(month + 1).padStart(2, '0')}-${String(day).padStart(2, '0')}`;
+                const hasWorklog = worklogData[dateKey] && (worklogData[dateKey].items.length > 0 || worklogData[dateKey].memo);
+                
+                let classes = 'cal-day';
+                if (isToday) classes += ' today';
+                if (hasWorklog) classes += ' has-worklog';
+
+                // 회의 개수만큼 점 생성 (최대 5개까지 표시)
+                let dotsHtml = '';
+                let indicators = '';
+                
+                if (count > 0) {
+                    const displayCount = Math.min(count, 5);
+                    let dots = '';
+                    for (let i = 0; i < displayCount; i++) {
+                        // 4개 이상은 주황색 점
+                        const dotClass = i >= 3 ? 'meeting-dot extra' : 'meeting-dot';
+                        dots += `<span class="${dotClass}"></span>`;
+                    }
+                    indicators += dots;
+                }
+                
+                // 업무일지 표시 (작은 사각형)
+                if (hasWorklog) {
+                    indicators += `<span class="worklog-dot"></span>`;
+                }
+                
+                if (indicators) {
+                    dotsHtml = `<div class="meeting-dots">${indicators}</div>`;
+                }
+
+                const tooltipText = count > 0 ? `${count}건의 회의` : '';
+                const worklogTooltip = hasWorklog ? (tooltipText ? ', 업무일지' : '업무일지') : '';
+                
+                html += `<div class="${classes}" data-day="${day}" data-count="${count}" title="${tooltipText}${worklogTooltip}">${day}${dotsHtml}</div>`;
+            }
+
+            calendar.innerHTML = html;
+
+            // 날짜 클릭 이벤트
+            calendar.querySelectorAll('.cal-day[data-day]').forEach(el => {
+                el.addEventListener('click', () => {
+                    const day = parseInt(el.dataset.day);
+                    showDayMeetings(year, month, day);
+                });
+            });
+        }
+
+        function showDayMeetings(year, month, day) {
+            const dateStr = `${year}-${String(month + 1).padStart(2, '0')}-${String(day).padStart(2, '0')}`;
+            const dayMeetings = store.meetings.filter(m => m.date === dateStr);
+            
+            // 업무일지도 해당 날짜로 전환
+            goToWorklogDate(year, month, day);
+            
+            // 해당 날짜에 회의와 업무일지 정보를 모달로 표시
+            showDayDetailModal(year, month, day, dayMeetings);
+        }
+
+        function showDayDetailModal(year, month, day, meetings) {
+            // 기존 모달 제거
+            const existingModal = document.querySelector('.day-meetings-modal');
+            if (existingModal) existingModal.remove();
+
+            const dateStr = `${year}-${String(month + 1).padStart(2, '0')}-${String(day).padStart(2, '0')}`;
+            const worklogData = getWorklogData();
+            const worklog = worklogData[dateStr] || { items: [], memo: '' };
+            const hasWorklog = worklog.items.length > 0 || worklog.memo;
+
+            const modal = document.createElement('div');
+            modal.className = 'day-meetings-modal';
+            
+            let content = `
+                <div class="day-meetings-content">
+                    <div class="day-meetings-header">
+                        <h3>📅 ${month + 1}월 ${day}일</h3>
+                        <button class="day-meetings-close">&times;</button>
+                    </div>
+            `;
+
+            // 회의 섹션
+            content += `<div class="day-section">
+                <div class="day-section-title">📋 회의 (${meetings.length}건)</div>`;
+            
+            if (meetings.length === 0) {
+                content += `<div class="day-empty">등록된 회의가 없습니다.</div>`;
+            } else {
+                content += `<div class="day-meetings-list">
+                    ${meetings.map(m => `
+                        <div class="day-meeting-item" data-id="${m.id}">
+                            <div class="day-meeting-info">
+                                <span class="day-meeting-title">${m.title}</span>
+                                <span class="day-meeting-folder">${m.folder}</span>
+                            </div>
+                            <span class="day-meeting-badge">${m.summary_content ? '✨ 요약' : '📄 원본'}</span>
+                        </div>
+                    `).join('')}
+                </div>`;
+            }
+            content += `</div>`;
+
+            // 업무일지 섹션
+            content += `<div class="day-section">
+                <div class="day-section-title">📝 업무일지</div>`;
+            
+            if (!hasWorklog) {
+                content += `<div class="day-empty">등록된 업무가 없습니다.</div>`;
+            } else {
+                if (worklog.items.length > 0) {
+                    content += `<div class="day-worklog-items">
+                        ${worklog.items.map(item => `
+                            <div class="day-worklog-item ${item.status}">
+                                <span class="day-worklog-status">${item.status === 'completed' ? '✓' : item.status === 'in_progress' ? '◐' : '○'}</span>
+                                <span class="day-worklog-text">${escapeHtml(item.content)}</span>
+                            </div>
+                        `).join('')}
+                    </div>`;
+                }
+                if (worklog.memo) {
+                    content += `<div class="day-worklog-memo">
+                        <span class="memo-label">💬 메모:</span>
+                        <span class="memo-text">${escapeHtml(worklog.memo)}</span>
+                    </div>`;
+                }
+            }
+            content += `</div>`;
+
+            // 업무일지 편집 버튼
+            content += `<div class="day-modal-actions">
+                <button class="day-edit-worklog-btn">✏️ 업무일지 편집</button>
+            </div>`;
+
+            content += `</div>`;
+            modal.innerHTML = content;
+
+            document.body.appendChild(modal);
+
+            // 닫기 버튼
+            modal.querySelector('.day-meetings-close').addEventListener('click', () => modal.remove());
+
+            // 배경 클릭으로 닫기
+            modal.addEventListener('click', (e) => {
+                if (e.target === modal) modal.remove();
+            });
+
+            // 회의 선택
+            modal.querySelectorAll('.day-meeting-item').forEach(item => {
+                item.addEventListener('click', () => {
+                    const meetingId = item.dataset.id;
+                    modal.remove();
+                    showMeetingDetail(meetingId);
+                });
+            });
+
+            // 업무일지 편집 버튼
+            modal.querySelector('.day-edit-worklog-btn').addEventListener('click', () => {
+                modal.remove();
+                isWorklogEditMode = true;
+                renderWorklog();
+                // 스크롤을 업무일지 카드로 이동
+                document.querySelector('.worklog-card').scrollIntoView({ behavior: 'smooth', block: 'center' });
+            });
+        }
+
+        // 기존 함수 호환성 유지
+        function showDayMeetingsModal(year, month, day, meetings) {
+            showDayDetailModal(year, month, day, meetings);
+        }
+
+        function renderProjectChart() {
+            const chart = document.getElementById('project-chart');
+            
+            // 전체 기간 S2 프로젝트별 집계
+            const s2Meetings = store.meetings.filter(m => m.folder === 'S2_meeting');
+            const projectCounts = {};
+            
+            s2Meetings.forEach(m => {
+                const project = m.project || '기타';
+                projectCounts[project] = (projectCounts[project] || 0) + 1;
+            });
+
+            const maxCount = Math.max(...Object.values(projectCounts), 1);
+            
+            // 정렬: 카운트 높은 순
+            const sorted = Object.entries(projectCounts).sort((a, b) => b[1] - a[1]);
+
+            if (sorted.length === 0) {
+                chart.innerHTML = `<div style="color: var(--text-muted); font-size: 0.85rem; text-align: center; padding: 20px;">S2 프로젝트 회의가 없습니다.</div>`;
+                return;
+            }
+
+            chart.innerHTML = sorted.map(([project, count]) => {
+                const width = (count / maxCount) * 100;
+                return `
+                    <div class="project-bar">
+                        <span class="project-name" title="${project}">${project}</span>
+                        <div class="project-bar-bg">
+                            <div class="project-bar-fill" style="width: ${Math.max(width, 10)}%">
+                                ${count > 0 ? `<span>${count}</span>` : ''}
+                            </div>
+                        </div>
+                        <span class="project-count">${count}</span>
+                    </div>
+                `;
+            }).join('');
+        }
+
+        function renderRecentMeetings() {
+            const container = document.getElementById('recent-meetings');
+            
+            // 최근 5개
+            const recent = [...store.meetings]
+                .sort((a, b) => b.date.localeCompare(a.date))
+                .slice(0, 5);
+
+            if (recent.length === 0) {
+                container.innerHTML = `<div style="color: var(--text-muted); text-align: center; padding: 20px;">회의록이 없습니다.</div>`;
+                return;
+            }
+
+            container.innerHTML = recent.map(m => {
+                const dateDisplay = m.date.replace(/^\d{4}-/, '').replace('-', '/');
+                return `
+                    <div class="recent-meeting-item" data-id="${m.id}">
+                        <span class="recent-date">${dateDisplay}</span>
+                        <div class="recent-info">
+                            <div class="recent-title">${m.title}</div>
+                            <div class="recent-folder">${m.folder}</div>
+                        </div>
+                    </div>
+                `;
+            }).join('');
+
+            container.querySelectorAll('.recent-meeting-item').forEach(el => {
+                el.addEventListener('click', () => showMeetingDetail(el.dataset.id));
+            });
+        }
+
+        function renderActionSummary() {
+            const container = document.getElementById('action-summary');
+            const storedStates = getStoredActionStates();
+            
+            // 모든 회의록에서 액션 아이템 수집
+            let allActions = [];
+            store.meetings.forEach(m => {
+                if (m.summary_content) {
+                    const items = extractActionItems(m.summary_content, m.title, m.date);
+                    items.forEach(item => {
+                        if (storedStates[item.id]) {
+                            item.status = storedStates[item.id];
+                        }
+                        allActions.push(item);
+                    });
+                }
+            });
+
+            // 최근 것만 (최대 10개)
+            allActions = allActions.sort((a, b) => b.date.localeCompare(a.date)).slice(0, 10);
+
+            const pending = allActions.filter(a => a.status === 'pending').length;
+            const progress = allActions.filter(a => a.status === 'in-progress').length;
+            const done = allActions.filter(a => a.status === 'completed').length;
+
+            let html = `
+                <div class="action-summary-stats">
+                    <div class="action-stat"><i class="dot pending"></i> 대기 ${pending}</div>
+                    <div class="action-stat"><i class="dot progress"></i> 진행 ${progress}</div>
+                    <div class="action-stat"><i class="dot done"></i> 완료 ${done}</div>
+                </div>
+                <div class="action-summary-list">
+            `;
+
+            if (allActions.length === 0) {
+                html += `<div style="color: var(--text-muted); text-align: center; padding: 10px;">액션 아이템이 없습니다.</div>`;
+            } else {
+                allActions.slice(0, 5).forEach(action => {
+                    const icon = action.status === 'completed' ? '✓' : 
+                                 action.status === 'in-progress' ? '◐' : '○';
+                    html += `
+                        <div class="action-summary-item">
+                            <span class="status-icon">${icon}</span>
+                            <span class="action-text">${action.text}</span>
+                            <span class="action-source">${action.source.substring(0, 15)}...</span>
+                        </div>
+                    `;
+                });
+            }
+
+            html += `</div>`;
+            container.innerHTML = html;
+        }
+
+        // ========== 업무일지 (Work Log) 기능 ==========
+        
+        const WORKLOG_STORAGE_KEY = 'meeting_tracker_worklog';
+        let currentWorklogDate = new Date(); // 현재 선택된 업무일지 날짜
+        let isWorklogEditMode = false; // 편집 모드 여부
+        
+        function getTodayString() {
+            const today = new Date();
+            return `${today.getFullYear()}-${String(today.getMonth() + 1).padStart(2, '0')}-${String(today.getDate()).padStart(2, '0')}`;
+        }
+
+        function getDateString(date) {
+            return `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, '0')}-${String(date.getDate()).padStart(2, '0')}`;
+        }
+
+        function isToday(date) {
+            const today = new Date();
+            return date.getFullYear() === today.getFullYear() &&
+                   date.getMonth() === today.getMonth() &&
+                   date.getDate() === today.getDate();
+        }
+
+        function getWorklogData() {
+            try {
+                const data = localStorage.getItem(WORKLOG_STORAGE_KEY);
+                return data ? JSON.parse(data) : {};
+            } catch (e) {
+                return {};
+            }
+        }
+
+        function saveWorklogData(data) {
+            localStorage.setItem(WORKLOG_STORAGE_KEY, JSON.stringify(data));
+        }
+
+        function getWorklogForDate(dateStr) {
+            const data = getWorklogData();
+            if (!data[dateStr]) {
+                return { items: [], memo: '' };
+            }
+            return data[dateStr];
+        }
+
+        function renderWorklog() {
+            const container = document.getElementById('worklog-items');
+            const memoArea = document.getElementById('worklog-memo');
+            const dateDisplay = document.getElementById('worklog-date');
+            const inputArea = document.getElementById('worklog-input-area');
+            const editBtn = document.getElementById('worklog-edit-btn');
+            const todayBtn = document.getElementById('worklog-today-btn');
+            
+            // 날짜 표시
+            const days = ['일', '월', '화', '수', '목', '금', '토'];
+            const month = currentWorklogDate.getMonth() + 1;
+            const day = currentWorklogDate.getDate();
+            const dayName = days[currentWorklogDate.getDay()];
+            dateDisplay.textContent = `${month}월 ${day}일 (${dayName})`;
+            
+            // 오늘인지 확인
+            const isTodayDate = isToday(currentWorklogDate);
+            todayBtn.classList.toggle('active', isTodayDate);
+            
+            // 해당 날짜 업무일지 로드
+            const dateStr = getDateString(currentWorklogDate);
+            const worklog = getWorklogForDate(dateStr);
+            
+            // 편집 모드 UI 업데이트
+            editBtn.classList.toggle('editing', isWorklogEditMode);
+            editBtn.textContent = isWorklogEditMode ? '✓ 완료' : '✏️ 편집';
+            inputArea.classList.toggle('hidden', !isWorklogEditMode);
+            memoArea.disabled = !isWorklogEditMode;
+            
+            // 메모 로드
+            memoArea.value = worklog.memo || '';
+            
+            // 업무 목록 렌더링
+            if (worklog.items.length === 0) {
+                const emptyMsg = isWorklogEditMode 
+                    ? '업무 내용을 추가해보세요 ✨' 
+                    : '등록된 업무가 없습니다.';
+                container.innerHTML = `<div class="worklog-empty">${emptyMsg}</div>`;
+                return;
+            }
+
+            container.innerHTML = worklog.items.map((item, index) => `
+                <div class="worklog-item ${item.status}" data-index="${index}">
+                    <div class="worklog-status ${item.status}" data-index="${index}" title="클릭하여 상태 변경">
+                        ${item.status === 'completed' ? '✓' : item.status === 'in_progress' ? '◐' : ''}
+                    </div>
+                    <span class="worklog-content">${escapeHtml(item.content)}</span>
+                    ${isWorklogEditMode ? `<button class="worklog-delete" data-index="${index}" title="삭제">×</button>` : ''}
+                </div>
+            `).join('');
+
+            // 상태 변경 이벤트
+            container.querySelectorAll('.worklog-status').forEach(el => {
+                el.addEventListener('click', () => {
+                    const index = parseInt(el.dataset.index);
+                    cycleWorklogStatus(index);
+                });
+            });
+
+            // 삭제 이벤트 (편집 모드에서만)
+            if (isWorklogEditMode) {
+                container.querySelectorAll('.worklog-delete').forEach(el => {
+                    el.addEventListener('click', () => {
+                        const index = parseInt(el.dataset.index);
+                        deleteWorklogItem(index);
+                    });
+                });
+            }
+        }
+
+        function escapeHtml(text) {
+            const div = document.createElement('div');
+            div.textContent = text;
+            return div.innerHTML;
+        }
+
+        function addWorklogItem(content) {
+            if (!content.trim()) return;
+            
+            const data = getWorklogData();
+            const dateStr = getDateString(currentWorklogDate);
+            
+            if (!data[dateStr]) {
+                data[dateStr] = { items: [], memo: '' };
+            }
+            
+            data[dateStr].items.push({
+                id: `wl_${Date.now()}`,
+                content: content.trim(),
+                status: 'pending',
+                createdAt: new Date().toISOString()
+            });
+            
+            saveWorklogData(data);
+            renderWorklog();
+            renderMiniCalendar(); // 캘린더에 업무일지 표시 업데이트
+        }
+
+        function cycleWorklogStatus(index) {
+            const data = getWorklogData();
+            const dateStr = getDateString(currentWorklogDate);
+            
+            if (!data[dateStr] || !data[dateStr].items[index]) return;
+            
+            const statusCycle = ['pending', 'in_progress', 'completed'];
+            const currentStatus = data[dateStr].items[index].status;
+            const currentIndex = statusCycle.indexOf(currentStatus);
+            const nextIndex = (currentIndex + 1) % statusCycle.length;
+            
+            data[dateStr].items[index].status = statusCycle[nextIndex];
+            saveWorklogData(data);
+            renderWorklog();
+        }
+
+        function deleteWorklogItem(index) {
+            const data = getWorklogData();
+            const dateStr = getDateString(currentWorklogDate);
+            
+            if (!data[dateStr] || !data[dateStr].items[index]) return;
+            
+            data[dateStr].items.splice(index, 1);
+            saveWorklogData(data);
+            renderWorklog();
+            renderMiniCalendar(); // 캘린더 업데이트
+        }
+
+        function saveWorklogMemo(memo) {
+            const data = getWorklogData();
+            const dateStr = getDateString(currentWorklogDate);
+            
+            if (!data[dateStr]) {
+                data[dateStr] = { items: [], memo: '' };
+            }
+            
+            data[dateStr].memo = memo;
+            saveWorklogData(data);
+            renderMiniCalendar(); // 캘린더 업데이트
+        }
+
+        function changeWorklogDate(days) {
+            currentWorklogDate.setDate(currentWorklogDate.getDate() + days);
+            isWorklogEditMode = false; // 날짜 변경 시 편집 모드 해제
+            renderWorklog();
+        }
+
+        function goToWorklogDate(year, month, day) {
+            currentWorklogDate = new Date(year, month, day);
+            isWorklogEditMode = false; // 날짜 변경 시 편집 모드 해제
+            renderWorklog();
+        }
+
+        function goToTodayWorklog() {
+            currentWorklogDate = new Date();
+            isWorklogEditMode = false;
+            renderWorklog();
+        }
+
+        function toggleWorklogEditMode() {
+            isWorklogEditMode = !isWorklogEditMode;
+            renderWorklog();
+        }
+
+        // 업무일지 이벤트 리스너 설정
+        function setupWorklogEvents() {
+            const input = document.getElementById('worklog-input');
+            const addBtn = document.getElementById('worklog-add-btn');
+            const memoArea = document.getElementById('worklog-memo');
+            const memoToggle = document.getElementById('worklog-memo-toggle');
+            const prevDayBtn = document.getElementById('worklog-prev-day');
+            const nextDayBtn = document.getElementById('worklog-next-day');
+            const todayBtn = document.getElementById('worklog-today-btn');
+            const editBtn = document.getElementById('worklog-edit-btn');
+
+            // 날짜 네비게이션
+            prevDayBtn.addEventListener('click', () => changeWorklogDate(-1));
+            nextDayBtn.addEventListener('click', () => changeWorklogDate(1));
+            todayBtn.addEventListener('click', goToTodayWorklog);
+
+            // 편집 모드 토글
+            editBtn.addEventListener('click', toggleWorklogEditMode);
+
+            // 업무 추가 버튼
+            addBtn.addEventListener('click', () => {
+                addWorklogItem(input.value);
+                input.value = '';
+                input.focus();
+            });
+
+            // Enter 키로 추가
+            input.addEventListener('keypress', (e) => {
+                if (e.key === 'Enter') {
+                    addWorklogItem(input.value);
+                    input.value = '';
+                }
+            });
+
+            // 메모 저장 (디바운스)
+            let memoTimeout;
+            memoArea.addEventListener('input', () => {
+                clearTimeout(memoTimeout);
+                memoTimeout = setTimeout(() => {
+                    saveWorklogMemo(memoArea.value);
+                }, 500);
+            });
+
+            // 메모 토글
+            memoToggle.addEventListener('click', () => {
+                memoToggle.classList.toggle('collapsed');
+                memoArea.classList.toggle('collapsed');
+            });
+        }
+
+        // 월 변경
+        document.getElementById('prev-month').addEventListener('click', () => {
+            currentDashboardDate.setMonth(currentDashboardDate.getMonth() - 1);
+            renderDashboard();
+        });
+
+        document.getElementById('next-month').addEventListener('click', () => {
+            currentDashboardDate.setMonth(currentDashboardDate.getMonth() + 1);
+            renderDashboard();
+        });
+
+        function organizeMeetings() {
+            store.folders = {};
+            store.groups = {};
+
+            store.meetings.forEach(meeting => {
+                const folder = meeting.folder || '기타';
+                
+                // 폴더별 정리
+                if (!store.folders[folder]) {
+                    store.folders[folder] = [];
+                }
+                store.folders[folder].push(meeting);
+
+                // 그룹별 정리 (폴더 내에서)
+                const groupKey = getGroupKey(meeting.filename, folder);
+                const groupId = `${folder}::${groupKey}`;
+                
+                if (!store.groups[groupId]) {
+                    store.groups[groupId] = {
+                        folder: folder,
+                        groupKey: groupKey,
+                        meetings: []
+                    };
+                }
+                store.groups[groupId].meetings.push(meeting);
+            });
+
+            // 각 그룹 내 회의록을 날짜순 정렬
+            Object.values(store.groups).forEach(group => {
+                group.meetings.sort((a, b) => new Date(b.date) - new Date(a.date));
+            });
+        }
+
+        // ==================== 렌더링 ====================
+        function renderFolderNav() {
+            const nav = document.getElementById('folder-nav');
+            
+            // 폴더 아이콘 매핑
+            const folderIcons = {
+                'MR_meeting': '🎯',
+                'S2_meeting': '🚀',
+                '비정기회의': '📌',
+                '기타': '📁'
+            };
+
+            // MR_Team 하위 폴더 아이콘 매핑
+            const mrTeamIcons = {
+                '101': '👤',
+                'AI Study': '🤖',
+                'Dashboard': '📊',
+                'Dept weekly': '🏢',
+                'MR Process': '⚙️',
+                'MR 딜리버리 리뷰': '📦',
+                'Team weekly': '👥',
+                '게임장르분석': '🎮',
+                '게임톡': '💬',
+                '기타': '📁'
+            };
+
+            // MR_Team 하위 폴더 정리
+            const mrTeamSubfolders = {};
+            const mainFolders = {};
+            let mrTeamTotalCount = 0;
+
+            Object.keys(store.folders).forEach(folder => {
+                if (folder.startsWith('MR_Team/')) {
+                    // MR_Team 하위 폴더들 - "MR_Team/하위폴더명" 형태
+                    const subName = folder.replace('MR_Team/', '');
+                    mrTeamSubfolders[subName] = {
+                        fullPath: folder,
+                        meetings: store.folders[folder]
+                    };
+                    mrTeamTotalCount += store.folders[folder].length;
+                } else {
+                    mainFolders[folder] = store.folders[folder];
+                }
+            });
+
+            let html = '';
+
+            // MR_meeting
+            if (mainFolders['MR_meeting']) {
+                const count = mainFolders['MR_meeting'].length;
+                html += `
+                    <div class="nav-item" data-folder="MR_meeting">
+                        <span>🎯</span>
+                        <span>MR meeting</span>
+                        <span class="badge">${count}</span>
+                    </div>
+                `;
+            }
+
+            // MR_Team (접기/펼치기)
+            const subfolderNames = Object.keys(mrTeamSubfolders);
+            if (subfolderNames.length > 0) {
+                html += `
+                    <div class="nav-folder" id="mr-team-folder">
+                        <span>📦</span>
+                        <span>MR Team</span>
+                        <span class="badge">${mrTeamTotalCount}</span>
+                        <span class="folder-toggle">▶</span>
+                    </div>
+                    <div class="nav-folder-children" id="mr-team-children">
+                `;
+                
+                // 정렬된 순서로 표시
+                subfolderNames.sort().forEach(subName => {
+                    const data = mrTeamSubfolders[subName];
+                    const count = data.meetings.length;
+                    const icon = mrTeamIcons[subName] || '📄';
+                    
+                    if (count > 0) {
+                        html += `
+                            <div class="nav-item" data-folder="${data.fullPath}">
+                                <span>${icon}</span>
+                                <span>${subName}</span>
+                                <span class="badge">${count}</span>
+                            </div>
+                        `;
+                    }
+                });
+                
+                html += `</div>`;
+            }
+
+            // S2_meeting
+            if (mainFolders['S2_meeting']) {
+                const count = mainFolders['S2_meeting'].length;
+                html += `
+                    <div class="nav-item" data-folder="S2_meeting">
+                        <span>🚀</span>
+                        <span>S2 meeting</span>
+                        <span class="badge">${count}</span>
+                    </div>
+                `;
+            }
+
+            // 비정기회의
+            if (mainFolders['비정기회의']) {
+                const count = mainFolders['비정기회의'].length;
+                html += `
+                    <div class="nav-item" data-folder="비정기회의">
+                        <span>📌</span>
+                        <span>비정기회의</span>
+                        <span class="badge">${count}</span>
+                    </div>
+                `;
+            }
+
+            nav.innerHTML = html;
+
+            // MR_Team 폴더 토글 이벤트
+            const mrTeamFolder = document.getElementById('mr-team-folder');
+            const mrTeamChildren = document.getElementById('mr-team-children');
+            if (mrTeamFolder && mrTeamChildren) {
+                mrTeamFolder.addEventListener('click', () => {
+                    mrTeamFolder.classList.toggle('expanded');
+                    mrTeamChildren.classList.toggle('show');
+                });
+            }
+
+            // 클릭 이벤트
+            nav.querySelectorAll('.nav-item').forEach(item => {
+                item.addEventListener('click', () => {
+                    nav.querySelectorAll('.nav-item').forEach(i => i.classList.remove('active'));
+                    document.getElementById('nav-dashboard').classList.remove('active');
+                    item.classList.add('active');
+                    showFolder(item.dataset.folder);
+                });
+            });
+        }
+
+        function showDashboard() {
+            // 대시보드 표시
+            document.getElementById('dashboard-view').style.display = 'block';
+            document.getElementById('folder-view').style.display = 'none';
+            document.getElementById('group-view').style.display = 'none';
+            document.getElementById('meeting-detail-view').classList.remove('active');
+
+            // 네비게이션 활성화 상태 변경
+            document.querySelectorAll('.nav-item').forEach(item => item.classList.remove('active'));
+            document.getElementById('nav-dashboard').classList.add('active');
+
+            store.currentFolder = null;
+            store.currentGroup = null;
+
+            renderDashboard();
+        }
+
+        function showFolder(folderName) {
+            store.currentFolder = folderName;
+            
+            // 대시보드 숨기고 폴더 뷰 표시
+            document.getElementById('dashboard-view').style.display = 'none';
+            document.getElementById('folder-view').style.display = 'block';
+            document.getElementById('group-view').style.display = 'none';
+            document.getElementById('meeting-detail-view').classList.remove('active');
+
+            // 네비게이션 활성화 상태 변경
+            document.querySelectorAll('.nav-item').forEach(item => item.classList.remove('active'));
+            const navItem = document.querySelector(`.nav-item[data-folder="${folderName}"]`);
+            if (navItem) navItem.classList.add('active');
+
+            document.getElementById('folder-title').textContent = `📁 ${folderName}`;
+
+            // 해당 폴더의 그룹들 찾기
+            const folderGroups = Object.entries(store.groups)
+                .filter(([id, group]) => {
+                    // 폴더명이 포함된 그룹 찾기
+                    return group.folder === folderName || 
+                           group.folder.includes(folderName) ||
+                           id.includes(folderName);
+                })
+                .map(([id, group]) => ({ id, ...group }));
+
+            renderGroupCards(folderGroups);
+        }
+
+        function renderGroupCards(groups) {
+            const grid = document.getElementById('groups-grid');
+
+            if (groups.length === 0) {
+                grid.innerHTML = `
+                    <div class="empty-state">
+                        <div class="icon">📭</div>
+                        <p>이 폴더에 회의록이 없습니다</p>
+                    </div>
+                `;
+                return;
+            }
+
+            // 단일 시리즈인 경우 바로 타임라인 보기
+            if (groups.length === 1 && groups[0].groupKey === '_single_') {
+                showGroupTimeline(groups[0].id);
+                return;
+            }
+
+            grid.innerHTML = groups.map(group => {
+                const latestDate = group.meetings[0]?.date || '-';
+                const displayName = group.groupKey === '_single_' ? store.currentFolder : group.groupKey;
+                
+                return `
+                    <div class="group-card" data-group-id="${group.id}">
+                        <div class="group-name">
+                            🎮 ${displayName}
+                        </div>
+                        <div class="group-meta">
+                            <span>📝 ${group.meetings.length}개 회의</span>
+                            <span>📅 최근: ${latestDate}</span>
+                        </div>
+                    </div>
+                `;
+            }).join('');
+
+            // 클릭 이벤트
+            grid.querySelectorAll('.group-card').forEach(card => {
+                card.addEventListener('click', () => {
+                    showGroupTimeline(card.dataset.groupId);
+                });
+            });
+        }
+
+        function showGroupTimeline(groupId) {
+            const group = store.groups[groupId];
+            if (!group) return;
+
+            store.currentGroup = groupId;
+            store.previousView = 'folder';
+
+            document.getElementById('folder-view').style.display = 'none';
+            document.getElementById('group-view').style.display = 'block';
+            document.getElementById('meeting-detail-view').classList.remove('active');
+
+            const displayName = group.groupKey === '_single_' ? store.currentFolder : group.groupKey;
+            document.getElementById('group-title').textContent = `🎮 ${displayName}`;
+            document.getElementById('timeline-count').textContent = `${group.meetings.length}개`;
+
+            const timeline = document.getElementById('group-timeline');
+            timeline.innerHTML = group.meetings.map(meeting => `
+                <div class="timeline-item" data-id="${meeting.id}">
+                    <div class="date">${meeting.date}</div>
+                    <div class="title">${meeting.title}</div>
+                    <div class="summary">${meeting.summary_content ? '✨ 요약본 포함' : '📄 원본만 있음'}</div>
+                </div>
+            `).join('');
+
+            // 클릭 이벤트
+            timeline.querySelectorAll('.timeline-item').forEach(item => {
+                item.addEventListener('click', () => {
+                    showMeetingDetail(item.dataset.id);
+                });
+            });
+
+            // 액션 아이템 트래커 렌더링
+            renderActionTracker(groupId);
+        }
+
+        let currentMeetingId = null;
+        let currentMeetingData = null;
+        let groupMeetingsList = []; // 같은 그룹의 회의 목록 (시간순 정렬)
+
+        async function showMeetingDetail(meetingId) {
+            currentMeetingId = meetingId;
+            store.previousView = 'group';
+
+            // 로딩 표시
+            const summaryContent = document.getElementById('summary-content');
+            summaryContent.innerHTML = `
+                <div class="loading-spinner">
+                    <div class="spinner"></div>
+                    <p>회의록 내용을 불러오는 중입니다...</p>
+                </div>
+            `;
+
+            try {
+                const response = await fetch(`${API_BASE}/api/meetings/${meetingId}`);
+                if (!response.ok) throw new Error('Failed to fetch meeting detail');
+                
+                const meeting = await response.json();
+                currentMeetingData = meeting;
+
+                document.getElementById('folder-view').style.display = 'none';
+                document.getElementById('group-view').style.display = 'none';
+                document.getElementById('meeting-detail-view').classList.add('active');
+
+                document.getElementById('meeting-detail-title').textContent = `📝 ${meeting.title}`;
+
+                // 원본 탭 내용 설정
+                const contentOriginal = document.getElementById('meeting-detail-content');
+                contentOriginal.innerHTML = `
+                    <div style="margin-bottom: 16px;">
+                        <span class="tag">📅 ${meeting.date}</span>
+                        <span class="tag">📁 ${meeting.folder}</span>
+                    </div>
+                    <h4>📄 원본 내용</h4>
+                    <pre style="white-space: pre-wrap; font-family: inherit; color: var(--text-secondary); font-size: 0.85rem; line-height: 1.7; max-height: 600px; overflow-y: auto; background: var(--bg-tertiary); padding: 16px; border-radius: 8px;">${meeting.content || '내용이 없습니다.'}</pre>
+                `;
+
+                // 요약 탭 내용 설정
+                if (meeting.summary_content) {
+                    showSummaryResult(meeting.summary_content);
+                } else {
+                    summaryContent.innerHTML = `
+                        <div class="empty-state">
+                            <div class="icon">📝</div>
+                            <p>생성된 요약본이 없습니다.</p>
+                            <p style="font-size: 0.8rem; color: var(--text-muted); margin-top: 8px;">
+                                해당 회의록의 _Summary.md 파일을 확인해주세요.
+                            </p>
+                        </div>
+                    `;
+                }
+
+                // 이전/다음 네비게이션 업데이트
+                updateMeetingNavigation(meetingId);
+
+                // 기본 탭을 요약으로 설정
+                switchTab('summary');
+
+            } catch (error) {
+                console.error('Error loading meeting detail:', error);
+                showNotification('회의록을 불러오는데 실패했습니다.', 'error');
+            }
+        }
+
+        // ==================== 이전/다음 회의 네비게이션 ====================
+        function updateMeetingNavigation(currentId) {
+            const navContainer = document.getElementById('meeting-nav');
+            const prevBtn = document.getElementById('prev-meeting-btn');
+            const nextBtn = document.getElementById('next-meeting-btn');
+            const prevDate = document.getElementById('prev-meeting-date');
+            const nextDate = document.getElementById('next-meeting-date');
+            const currentIndex = document.getElementById('current-meeting-index');
+            const totalCount = document.getElementById('total-meetings-count');
+
+            // 현재 그룹의 회의 목록 가져오기
+            if (store.currentGroup && store.groups[store.currentGroup]) {
+                groupMeetingsList = [...store.groups[store.currentGroup].meetings]
+                    .sort((a, b) => a.date.localeCompare(b.date)); // 날짜순 정렬
+            } else {
+                groupMeetingsList = [];
+            }
+
+            // 그룹에 2개 이상의 회의가 있으면 네비게이션 표시
+            if (groupMeetingsList.length > 1) {
+                navContainer.style.display = 'flex';
+                
+                const currentIdx = groupMeetingsList.findIndex(m => m.id === currentId);
+                const prevMeeting = currentIdx > 0 ? groupMeetingsList[currentIdx - 1] : null;
+                const nextMeeting = currentIdx < groupMeetingsList.length - 1 ? groupMeetingsList[currentIdx + 1] : null;
+
+                // 현재 위치 표시
+                currentIndex.textContent = currentIdx + 1;
+                totalCount.textContent = groupMeetingsList.length;
+
+                // 이전 버튼 설정
+                if (prevMeeting) {
+                    prevBtn.disabled = false;
+                    prevDate.textContent = prevMeeting.date;
+                    prevBtn.onclick = () => showMeetingDetail(prevMeeting.id);
+                } else {
+                    prevBtn.disabled = true;
+                    prevDate.textContent = '-';
+                    prevBtn.onclick = null;
+                }
+
+                // 다음 버튼 설정
+                if (nextMeeting) {
+                    nextBtn.disabled = false;
+                    nextDate.textContent = nextMeeting.date;
+                    nextBtn.onclick = () => showMeetingDetail(nextMeeting.id);
+                } else {
+                    nextBtn.disabled = true;
+                    nextDate.textContent = '-';
+                    nextBtn.onclick = null;
+                }
+            } else {
+                navContainer.style.display = 'none';
+            }
+        }
+
+        // ==================== 액션 아이템 트래커 ====================
+        // 로컬 스토리지에서 액션 아이템 상태 관리
+        const ACTION_STORAGE_KEY = 'meeting_action_items';
+
+        function getStoredActionStates() {
+            try {
+                return JSON.parse(localStorage.getItem(ACTION_STORAGE_KEY)) || {};
+            } catch {
+                return {};
+            }
+        }
+
+        function saveActionState(actionId, status) {
+            const states = getStoredActionStates();
+            states[actionId] = status;
+            localStorage.setItem(ACTION_STORAGE_KEY, JSON.stringify(states));
+        }
+
+        // 요약에서 액션 아이템 추출
+        function extractActionItems(summary, meetingTitle, meetingDate) {
+            const items = [];
+            if (!summary) return items;
+
+            // 액션 아이템/결정 사항/To-Do 패턴 매칭
+            const patterns = [
+                /\[(?:To-Do|TODO|액션|Action)\]\s*(.+)/gi,
+                /\[결정(?:\s*사항)?\]\s*(.+)/gi,
+                /[-*]\s*\[([^\]]+)\]\s*(.+)/g,  // - [담당자] 내용
+                /(?:담당|책임)(?:자)?[:\s]+([^,\n]+)[,\s]+(.+)/gi,
+                /(?:~까지|기한|마감)[:\s]*([^\n]+)/gi
+            ];
+
+            // 섹션 기반 추출 (결정 사항 및 액션 아이템 섹션)
+            const sectionPattern = /##\s*(?:\d+\.\s*)?(?:결정\s*사항|액션\s*아이템|Action\s*Items?|To-?Do|F\/U)[^\n]*\n([\s\S]*?)(?=##|$)/gi;
+            let sectionMatch;
+            while ((sectionMatch = sectionPattern.exec(summary)) !== null) {
+                const sectionContent = sectionMatch[1];
+                const lines = sectionContent.split('\n').filter(l => l.trim());
+                
+                lines.forEach((line, idx) => {
+                    const cleanLine = line.replace(/^[-*•]\s*/, '').trim();
+                    if (cleanLine && cleanLine.length > 5 && !cleanLine.startsWith('#')) {
+                        items.push({
+                            id: `${meetingDate}_${idx}_${cleanLine.substring(0, 20)}`,
+                            text: cleanLine,
+                            source: meetingTitle,
+                            date: meetingDate,
+                            status: 'pending'
+                        });
+                    }
+                });
+            }
+
+            // 중복 제거
+            const uniqueItems = items.filter((item, index, self) =>
+                index === self.findIndex(t => t.text === item.text)
+            );
+
+            return uniqueItems.slice(0, 15); // 최대 15개
+        }
+
+        // 그룹의 모든 회의에서 액션 아이템 수집
+        async function loadGroupActionItems(groupKey) {
+            const group = store.groups[groupKey];
+            if (!group) return [];
+
+            const allItems = [];
+            const storedStates = getStoredActionStates();
+
+            for (const meeting of group.meetings) {
+                if (meeting.summary_content) {
+                    const items = extractActionItems(meeting.summary_content, meeting.title, meeting.date);
+                    items.forEach(item => {
+                        // 저장된 상태 복원
+                        if (storedStates[item.id]) {
+                            item.status = storedStates[item.id];
+                        }
+                        allItems.push(item);
+                    });
+                }
+            }
+
+            // 날짜 역순 정렬 (최신 먼저)
+            return allItems.sort((a, b) => b.date.localeCompare(a.date));
+        }
+
+        // 액션 아이템 UI 렌더링
+        async function renderActionTracker(groupKey) {
+            const listContainer = document.getElementById('action-list');
+            const items = await loadGroupActionItems(groupKey);
+
+            if (items.length === 0) {
+                listContainer.innerHTML = `
+                    <div class="action-empty">
+                        추출된 액션 아이템이 없습니다.<br>
+                        <span style="font-size: 0.75rem; color: var(--text-muted);">
+                            요약본에 [결정 사항], [To-Do] 등의 섹션이 있으면 자동으로 추출됩니다.
+                        </span>
+                    </div>
+                `;
+                updateActionStats(0, 0, 0);
+                return;
+            }
+
+            listContainer.innerHTML = items.map(item => `
+                <div class="action-item" data-id="${item.id}">
+                    <div class="action-checkbox ${item.status}" onclick="cycleActionStatus('${item.id}', this)"></div>
+                    <div class="action-content">
+                        <div class="action-text ${item.status === 'completed' ? 'completed' : ''}">${item.text}</div>
+                        <div class="action-meta">
+                            <span class="source">📄 ${item.source}</span>
+                            <span>📅 ${item.date}</span>
+                        </div>
+                    </div>
+                </div>
+            `).join('');
+
+            // 통계 업데이트
+            const completed = items.filter(i => i.status === 'completed').length;
+            const inProgress = items.filter(i => i.status === 'in-progress').length;
+            const pending = items.filter(i => i.status === 'pending').length;
+            updateActionStats(completed, inProgress, pending);
+        }
+
+        function updateActionStats(completed, inProgress, pending) {
+            document.getElementById('stat-completed').textContent = `✓ ${completed}`;
+            document.getElementById('stat-progress').textContent = `◐ ${inProgress}`;
+            document.getElementById('stat-pending').textContent = `○ ${pending}`;
+        }
+
+        // 상태 순환: pending → in-progress → completed → pending
+        function cycleActionStatus(actionId, element) {
+            const currentStatus = element.classList.contains('completed') ? 'completed' :
+                                  element.classList.contains('in-progress') ? 'in-progress' : 'pending';
+            
+            let newStatus;
+            if (currentStatus === 'pending') newStatus = 'in-progress';
+            else if (currentStatus === 'in-progress') newStatus = 'completed';
+            else newStatus = 'pending';
+
+            // UI 업데이트
+            element.classList.remove('pending', 'in-progress', 'completed');
+            element.classList.add(newStatus);
+
+            // 텍스트 스타일 업데이트
+            const textEl = element.parentElement.querySelector('.action-text');
+            if (newStatus === 'completed') {
+                textEl.classList.add('completed');
+            } else {
+                textEl.classList.remove('completed');
+            }
+
+            // 상태 저장
+            saveActionState(actionId, newStatus);
+
+            // 통계 다시 계산
+            const items = document.querySelectorAll('.action-checkbox');
+            let completed = 0, inProgress = 0, pending = 0;
+            items.forEach(item => {
+                if (item.classList.contains('completed')) completed++;
+                else if (item.classList.contains('in-progress')) inProgress++;
+                else pending++;
+            });
+            updateActionStats(completed, inProgress, pending);
+        }
+
+        function showSummaryResult(summary) {
+            const summaryContent = document.getElementById('summary-content');
+            
+            // 섹션별로 분리하여 카드로 렌더링
+            const sections = parseSections(summary);
+            
+            if (sections.length === 0) {
+                // 섹션 구분이 없으면 기존 방식으로 렌더링
+                summaryContent.innerHTML = `
+                    <div class="summary-result">
+                        <div class="section-card" data-type="detail">
+                            <div class="section-card-content">
+                                ${markdownToHtml(summary)}
+                            </div>
+                        </div>
+                    </div>
+                `;
+                return;
+            }
+
+            const cardsHtml = sections.map(section => {
+                const typeInfo = getSectionType(section.title);
+                return `
+                    <div class="section-card" data-type="${typeInfo.type}">
+                        <div class="section-card-header">
+                            <span class="section-card-icon">${typeInfo.icon}</span>
+                            <h2 class="section-card-title">${section.title}</h2>
+                        </div>
+                        <div class="section-card-content">
+                            ${markdownToHtml(section.content)}
+                        </div>
+                    </div>
+                `;
+            }).join('');
+
+            summaryContent.innerHTML = `<div class="summary-result">${cardsHtml}</div>`;
+        }
+
+        // 마크다운을 ## 기준으로 섹션 분리
+        function parseSections(markdown) {
+            const sections = [];
+            // ## 로 시작하는 섹션 분리 (## 앞에 줄바꿈이 있거나 문서 시작)
+            const sectionRegex = /(?:^|\n)## (.+?)(?=\n)/g;
+            const matches = [...markdown.matchAll(sectionRegex)];
+            
+            if (matches.length === 0) return [];
+
+            matches.forEach((match, index) => {
+                const title = match[1].trim();
+                const startIndex = match.index + match[0].length;
+                const endIndex = index < matches.length - 1 
+                    ? matches[index + 1].index 
+                    : markdown.length;
+                
+                let content = markdown.substring(startIndex, endIndex).trim();
+                // --- 구분선 제거
+                content = content.replace(/^---\s*$/gm, '').trim();
+                
+                sections.push({ title, content });
+            });
+
+            return sections;
+        }
+
+        // 섹션 제목에 따른 타입과 아이콘 결정
+        function getSectionType(title) {
+            const titleLower = title.toLowerCase();
+            
+            if (titleLower.includes('개요') || titleLower.includes('overview') || titleLower.includes('summary')) {
+                return { type: 'overview', icon: '📋' };
+            }
+            if (titleLower.includes('상세') || titleLower.includes('현황') || titleLower.includes('deep') || titleLower.includes('detail') || titleLower.includes('분석') || titleLower.includes('내용')) {
+                return { type: 'detail', icon: '📊' };
+            }
+            if (titleLower.includes('리스크') || titleLower.includes('risk') || titleLower.includes('인사이트') || titleLower.includes('insight') || titleLower.includes('이슈')) {
+                return { type: 'risk', icon: '⚠️' };
+            }
+            if (titleLower.includes('결정') || titleLower.includes('액션') || titleLower.includes('action') || titleLower.includes('to-do') || titleLower.includes('todo') || titleLower.includes('decision')) {
+                return { type: 'action', icon: '✅' };
+            }
+            if (titleLower.includes('f/u') || titleLower.includes('follow') || titleLower.includes('다음') || titleLower.includes('next') || titleLower.includes('q&a') || titleLower.includes('qna') || titleLower.includes('요약') || titleLower.includes('결론')) {
+                return { type: 'followup', icon: '📅' };
+            }
+            if (titleLower.includes('핵심') || titleLower.includes('key') || titleLower.includes('요점')) {
+                return { type: 'overview', icon: '💡' };
+            }
+            
+            return { type: 'detail', icon: '📄' };
+        }
+
+        // 섹션 내용을 HTML로 변환 (## 제외, ### 이하만 처리)
+        function markdownToHtml(markdown) {
+            // 테이블 파싱을 먼저 처리
+            let result = markdown;
+            
+            // 마크다운 테이블 파싱
+            result = result.replace(/(\|.+\|[\r\n]+\|[-:\s|]+\|[\r\n]+(?:\|.+\|[\r\n]*)+)/gm, (tableMatch) => {
+                const lines = tableMatch.trim().split('\n').filter(line => line.trim());
+                if (lines.length < 2) return tableMatch;
+                
+                // 헤더 행 파싱
+                const headerCells = lines[0].split('|').filter(cell => cell.trim() !== '');
+                
+                // 구분선 확인 (두 번째 줄)
+                if (!lines[1].match(/^\|[\s-:|]+\|$/)) return tableMatch;
+                
+                // 데이터 행 파싱
+                const dataRows = lines.slice(2);
+                
+                let tableHtml = '<table class="md-table"><thead><tr>';
+                headerCells.forEach(cell => {
+                    tableHtml += `<th>${cell.trim()}</th>`;
+                });
+                tableHtml += '</tr></thead><tbody>';
+                
+                dataRows.forEach(row => {
+                    const cells = row.split('|').filter(cell => cell.trim() !== '');
+                    tableHtml += '<tr>';
+                    cells.forEach(cell => {
+                        // 셀 내 볼드 처리
+                        let cellContent = cell.trim().replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>');
+                        tableHtml += `<td>${cellContent}</td>`;
+                    });
+                    tableHtml += '</tr>';
+                });
+                
+                tableHtml += '</tbody></table>';
+                return tableHtml;
+            });
+            
+            return result
+                // #### 헤더 처리
+                .replace(/^#### (.+)$/gm, '<h4>$1</h4>')
+                // ### 헤더만 처리 (## 는 카드 헤더로 분리됨)
+                .replace(/^### (.+)$/gm, '<h3>$1</h3>')
+                // Bold
+                .replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>')
+                // Italic (볼드가 아닌 경우만)
+                .replace(/(?<!\*)\*(?!\*)(.+?)(?<!\*)\*(?!\*)/g, '<em>$1</em>')
+                // 중첩 리스트를 포함한 리스트 처리
+                .replace(/^(\s*)[-*] (.+)$/gm, (match, indent, content) => {
+                    const level = indent.length >= 2 ? 'nested' : 'top';
+                    return `<li data-level="${level}">${content}</li>`;
+                })
+                // 연속된 li를 ul로 감싸기
+                .replace(/(<li[^>]*>.*?<\/li>\n?)+/gs, (match) => {
+                    // 중첩 리스트 처리
+                    let result = match;
+                    // nested 레벨 li들을 별도 ul로 감싸기
+                    result = result.replace(/(<li data-level="nested">.*?<\/li>\n?)+/gs, '<ul class="nested">$&</ul>');
+                    return `<ul>${result}</ul>`;
+                })
+                // data-level 속성 제거
+                .replace(/ data-level="[^"]*"/g, '')
+                // 줄바꿈 처리
+                .replace(/\n\n+/g, '</p><p>')
+                .replace(/([^>\n])\n([^<\n])/g, '$1<br>$2')
+                // 빈 태그 정리
+                .replace(/<p>\s*<\/p>/g, '')
+                .replace(/<p>\s*<ul>/g, '<ul>')
+                .replace(/<\/ul>\s*<\/p>/g, '</ul>')
+                .replace(/<p>\s*<h3>/g, '<h3>')
+                .replace(/<\/h3>\s*<\/p>/g, '</h3>')
+                .replace(/<p>\s*<h4>/g, '<h4>')
+                .replace(/<\/h4>\s*<\/p>/g, '</h4>')
+                .replace(/<p>\s*<table/g, '<table')
+                .replace(/<\/table>\s*<\/p>/g, '</table>')
+                // 연속 ul 병합
+                .replace(/<\/ul>\s*<ul>/g, '')
+                .trim();
+        }
+
+        function switchTab(tabName) {
+            // 탭 버튼 상태 변경
+            document.querySelectorAll('.tab-btn').forEach(btn => {
+                btn.classList.toggle('active', btn.dataset.tab === tabName);
+            });
+
+            // 탭 콘텐츠 전환
+            document.getElementById('content-summary').style.display = tabName === 'summary' ? 'block' : 'none';
+            document.getElementById('content-original').style.display = tabName === 'original' ? 'block' : 'none';
+        }
+
+        // 탭 클릭 이벤트
+        document.getElementById('tab-summary').addEventListener('click', () => switchTab('summary'));
+        document.getElementById('tab-original').addEventListener('click', () => switchTab('original'));
+
+        // ==================== Navigation ====================
+        document.getElementById('back-to-folder').addEventListener('click', () => {
+            if (store.currentFolder) {
+                showFolder(store.currentFolder);
+            }
+        });
+
+        document.getElementById('back-to-group').addEventListener('click', () => {
+            if (store.currentGroup) {
+                showGroupTimeline(store.currentGroup);
+            } else if (store.currentFolder) {
+                showFolder(store.currentFolder);
+            }
+        });
+
+        // ==================== Chat ====================
+        document.getElementById('open-chat').addEventListener('click', () => {
+            document.getElementById('chat-panel').classList.add('active');
+        });
+
+        document.getElementById('close-chat').addEventListener('click', () => {
+            document.getElementById('chat-panel').classList.remove('active');
+        });
+
+        document.getElementById('chat-send').addEventListener('click', sendChatMessage);
+        document.getElementById('chat-input').addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') sendChatMessage();
+        });
+
+        async function sendChatMessage() {
+            const input = document.getElementById('chat-input');
+            const query = input.value.trim();
+            if (!query) return;
+
+            addChatMessage(query, true);
+            input.value = '';
+
+            // 로딩 표시
+            const loadingId = addLoadingMessage();
+
+            try {
+                const response = await fetch(`${API_BASE}/api/chat`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ query })
+                });
+
+                removeLoadingMessage(loadingId);
+
+                if (response.ok) {
+                    const data = await response.json();
+                    addChatMessageWithSources(data.answer, data.sources || []);
+                } else {
+                    addChatMessage('응답 생성 중 오류가 발생했습니다.', false);
+                }
+            } catch (error) {
+                removeLoadingMessage(loadingId);
+                addChatMessage('서버 연결에 실패했습니다.', false);
+            }
+        }
+
+        function addLoadingMessage() {
+            const messages = document.getElementById('chat-messages');
+            const div = document.createElement('div');
+            const id = 'loading-' + Date.now();
+            div.id = id;
+            div.className = 'chat-message assistant';
+            div.innerHTML = `
+                <div class="bubble loading-bubble">
+                    <span class="loading-dots">
+                        <span>.</span><span>.</span><span>.</span>
+                    </span>
+                    회의록을 검색하고 있습니다...
+                </div>
+            `;
+            messages.appendChild(div);
+            messages.scrollTop = messages.scrollHeight;
+            return id;
+        }
+
+        function removeLoadingMessage(id) {
+            const el = document.getElementById(id);
+            if (el) el.remove();
+        }
+
+        function addChatMessage(text, isUser) {
+            const messages = document.getElementById('chat-messages');
+            const div = document.createElement('div');
+            div.className = `chat-message ${isUser ? 'user' : 'assistant'}`;
+            div.innerHTML = `<div class="bubble">${text}</div>`;
+            messages.appendChild(div);
+            messages.scrollTop = messages.scrollHeight;
+        }
+
+        function addChatMessageWithSources(answer, sources) {
+            const messages = document.getElementById('chat-messages');
+            const div = document.createElement('div');
+            div.className = 'chat-message assistant';
+
+            // 답변 텍스트를 HTML로 변환 (줄바꿈 처리)
+            const formattedAnswer = answer
+                .replace(/\n\n/g, '</p><p>')
+                .replace(/\n/g, '<br>')
+                .replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>');
+
+            let sourcesHtml = '';
+            if (sources && sources.length > 0) {
+                sourcesHtml = `
+                    <div class="chat-sources">
+                        <div class="sources-label">📚 참고한 회의록:</div>
+                        <div class="sources-list">
+                            ${sources.map(s => `
+                                <div class="source-item" onclick="navigateToMeeting('${s.id}')" title="클릭하여 회의록 보기">
+                                    <span class="source-date">${s.date}</span>
+                                    <span class="source-title">${s.title}</span>
+                                    <span class="source-folder">${s.folder}</span>
+                                </div>
+                            `).join('')}
+                        </div>
+                    </div>
+                `;
+            }
+
+            div.innerHTML = `
+                <div class="bubble">
+                    <div class="answer-content"><p>${formattedAnswer}</p></div>
+                    ${sourcesHtml}
+                </div>
+            `;
+            messages.appendChild(div);
+            messages.scrollTop = messages.scrollHeight;
+        }
+
+        function navigateToMeeting(meetingId) {
+            // 채팅 패널 닫기
+            document.getElementById('chat-panel').classList.remove('active');
+            // 회의록 상세 보기
+            showMeetingDetail(meetingId);
+        }
+
+        // ==================== Sync ====================
+        document.getElementById('sync-btn').addEventListener('click', async () => {
+            try {
+                await fetch(`${API_BASE}/api/sync`);
+                await loadDataFromServer();
+            } catch (error) {
+                showNotification('동기화 실패', 'error');
+            }
+        });
+
+        // ==================== Utility ====================
+        function showNotification(message, type) {
+            const notification = document.createElement('div');
+            notification.className = `notification ${type}`;
+            notification.textContent = message;
+            document.body.appendChild(notification);
+            setTimeout(() => notification.remove(), 3000);
+        }
+
+        // ==================== Init ====================
+        document.addEventListener('DOMContentLoaded', () => {
+            loadDataFromServer();
+            setupWorklogEvents();
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,51 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+env/
+venv/
+.env
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Logs
+*.log
+
+# 민감한 정보
+.env.local
+.env.*.local
+secrets.json
+
+# ============================================
+# 회의록 데이터 제외 (팀원 공유 시)
+# ============================================
+# 아래 주석을 해제하면 회의록 데이터가 Git에서 제외됩니다.
+# 팀원 공유용 저장소에는 주석을 해제하세요.
+
+# 회의록 원본 파일
+# *.txt
+
+# 회의록 요약 파일
+# *_Summary.md
+
+# 특정 폴더 전체 제외
+# S2_meeting/
+# MR_meeting/
+# MR_Team/
+# 비정기회의/
+
+# 백업 폴더
+backup_v1/
+
+# 발표자료 (선택)
+발표자료_*.md
