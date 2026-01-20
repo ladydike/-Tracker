@@ -247,11 +247,33 @@ async def get_summary(meeting_id: str):
     return {"exists": True, "summary": m.summary_content}
 
 def search_meetings(query: str, max_results: int = 10) -> List[tuple]:
-    """회의록 검색 - 키워드 매칭 + 관련성 점수 (개선됨)"""
+    """회의록 검색 - 키워드 매칭 + 관련성 점수 (개선됨 v3)"""
     query_lower = query.lower()
     
-    # 키워드 분리 (1글자도 포함, 한글 검색 개선)
-    keywords = [kw.strip() for kw in query_lower.split() if len(kw.strip()) >= 1]
+    # 한국어 조사 패턴 (단어 끝에서 제거)
+    korean_particles = ['에서', '에게', '으로', '이랑', '하고', '라고', '니까', '지만', '는데', '에서는', '에게는',
+                        '이', '가', '을', '를', '의', '와', '과', '도', '는', '은', '에', '로', '만', '부터', '까지']
+    
+    def remove_particles(word):
+        """단어 끝의 조사 제거"""
+        for particle in sorted(korean_particles, key=len, reverse=True):  # 긴 조사부터 처리
+            if word.endswith(particle) and len(word) > len(particle):
+                return word[:-len(particle)]
+        return word
+    
+    # 키워드 분리 및 조사 제거
+    raw_keywords = [kw.strip() for kw in query_lower.split() if len(kw.strip()) >= 2]
+    keywords = []
+    for kw in raw_keywords:
+        cleaned = remove_particles(kw)
+        if len(cleaned) >= 2:
+            keywords.append(cleaned)
+        # 원본도 추가 (조사 포함된 형태로 검색될 수도 있음)
+        if kw not in keywords and len(kw) >= 2:
+            keywords.append(kw)
+    
+    # 중복 제거
+    keywords = list(dict.fromkeys(keywords))
     
     # 연속된 단어 조합도 검색어로 추가 (예: "해저 케이블" -> ["해저", "케이블", "해저 케이블"])
     if len(keywords) >= 2:
@@ -259,17 +281,20 @@ def search_meetings(query: str, max_results: int = 10) -> List[tuple]:
             combined = keywords[i] + " " + keywords[i + 1]
             if combined not in keywords:
                 keywords.append(combined)
-        # 전체 쿼리도 추가
-        if query_lower not in keywords:
-            keywords.append(query_lower)
+    
+    # 디버깅 로그
+    print(f"[검색] 쿼리: '{query}' → 키워드: {keywords}")
     
     scored_meetings = []
     
     for m in store.meetings.values():
-        # 검색 대상: 제목 + 폴더명 + 원본 + 요약본 (폴더명 추가!)
-        search_text = f"{m.title} {m.folder} {m.content}".lower()
-        if m.summary_content:
-            search_text += " " + m.summary_content.lower()
+        # 검색 대상: 제목 + 폴더명 + 원본 + 요약본
+        title_lower = m.title.lower()
+        folder_lower = m.folder.lower()
+        content_lower = m.content.lower()
+        summary_lower = m.summary_content.lower() if m.summary_content else ""
+        
+        search_text = f"{title_lower} {folder_lower} {content_lower} {summary_lower}"
         
         # 점수 계산
         score = 0
@@ -277,34 +302,52 @@ def search_meetings(query: str, max_results: int = 10) -> List[tuple]:
         
         for kw in keywords:
             if kw in search_text:
-                # 제목에 있으면 가중치 높음
-                if kw in m.title.lower():
-                    score += 5
-                # 폴더명에 있으면 가중치
-                elif kw in m.folder.lower():
-                    score += 4
-                # 요약본에 있으면 가중치
-                elif m.summary_content and kw in m.summary_content.lower():
-                    score += 3
-                # 원본에 있으면 기본 점수
-                else:
-                    score += 1
                 matched_keywords.append(kw)
+                
+                # 제목에 있으면 최고 가중치
+                if kw in title_lower:
+                    score += 10
+                # 폴더명에 있으면 높은 가중치
+                elif kw in folder_lower:
+                    score += 8
+                # 요약본에 있으면 중간 가중치
+                elif kw in summary_lower:
+                    score += 5
+                # 원본에 있으면 기본 점수
+                elif kw in content_lower:
+                    score += 2
+                
+                # 키워드가 여러 번 등장하면 추가 점수
+                count = search_text.count(kw)
+                if count > 1:
+                    score += min(count - 1, 5)  # 최대 5점 추가
         
         # 프로젝트명 매칭 보너스
         if m.project and m.project.lower() in query_lower:
-            score += 5
-        
-        # 모든 키워드가 매칭되면 보너스 (더 정확한 결과)
-        base_keywords = [kw.strip() for kw in query_lower.split() if len(kw.strip()) >= 1]
-        if len(base_keywords) > 1 and all(kw in search_text for kw in base_keywords):
             score += 10
+        
+        # 모든 키워드가 매칭되면 큰 보너스 (더 정확한 결과)
+        if len(keywords) > 1 and all(kw in search_text for kw in keywords):
+            score += 20
+        
+        # 정확한 구문 매칭 보너스 (예: "해저 케이블"이 그대로 있으면)
+        if query_lower in search_text:
+            score += 15
         
         if score > 0:
             scored_meetings.append((m, score, matched_keywords))
     
     # 점수순 정렬 후 상위 N개
     scored_meetings.sort(key=lambda x: (-x[1], x[0].date), reverse=False)
+    
+    # 디버깅: 상위 결과 출력
+    if scored_meetings:
+        print(f"[검색 결과] 상위 {min(5, len(scored_meetings))}개:")
+        for m, score, kws in scored_meetings[:5]:
+            print(f"  - {m.title} (점수: {score}, 매칭: {kws})")
+    else:
+        print("[검색 결과] 매칭된 회의록 없음")
+    
     return scored_meetings[:max_results]
 
 @app.post("/api/chat")
@@ -314,8 +357,8 @@ async def chat(request: dict):
     if not api_key:
         return {"answer": "ANTHROPIC_API_KEY가 설정되지 않았습니다.", "sources": []}
     
-    # 관련 회의록 검색
-    search_results = search_meetings(query, max_results=5)
+    # 관련 회의록 검색 (결과 수 확대)
+    search_results = search_meetings(query, max_results=10)
     
     if not search_results:
         return {"answer": "관련된 회의록을 찾지 못했습니다. 다른 키워드로 검색해보세요.", "sources": []}
@@ -348,12 +391,19 @@ async def chat(request: dict):
 
 주어진 회의록 컨텍스트를 바탕으로 사용자의 질문에 정확하게 답변하세요.
 
-**중요 규칙:**
+**⚠️ 필수 규칙 (반드시 준수):**
 1. 반드시 제공된 회의록 내용만을 기반으로 답변하세요.
-2. 답변 시 해당 정보의 출처를 반드시 명시하세요. 예: "(출처: 251217 S2_PalM, 2025-12-17)"
-3. 여러 회의록에서 관련 정보가 있다면 통합하여 답변하고, 각각의 출처를 표시하세요.
-4. 제공된 컨텍스트에 없는 내용은 "관련 정보가 회의록에 없습니다"라고 명확히 알려주세요.
-5. 답변은 한국어로 작성하세요."""
+2. **[출처 명시 필수]** 모든 정보에는 반드시 출처를 명시하세요!
+   - 형식: **(출처: [회의 제목], [날짜])**
+   - 예시: "해저 케이블은 전 세계 인터넷을 연결합니다. **(출처: 260113_게임톡, 2026-01-13)**"
+3. **[답변 마지막에 참고 회의록 목록 필수]** 답변 끝에 반드시 아래 형식으로 참고한 회의록을 나열하세요:
+   ---
+   📌 **참고 회의록:**
+   - [회의 제목] (날짜, 폴더)
+   - [회의 제목] (날짜, 폴더)
+4. 여러 회의록에서 정보가 있다면 각각의 출처를 개별적으로 표시하세요.
+5. 제공된 컨텍스트에 없는 내용은 "관련 정보가 회의록에 없습니다"라고 명확히 알려주세요.
+6. 답변은 한국어로 작성하세요."""
 
     user_prompt = f"""아래는 검색된 회의록입니다:
 
@@ -363,7 +413,8 @@ async def chat(request: dict):
 
 질문: {query}
 
-위 회의록 내용을 바탕으로 답변해주세요. 답변 시 반드시 출처(회의 제목, 날짜)를 명시해주세요."""
+위 회의록 내용을 바탕으로 답변해주세요. 
+⚠️ 중요: 모든 정보에 출처를 명시하고, 답변 마지막에 반드시 "📌 참고 회의록:" 목록을 포함하세요!"""
 
     async with httpx.AsyncClient(timeout=90.0) as client:
         try:
