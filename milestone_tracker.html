@@ -154,15 +154,15 @@
             color: var(--text-primary);
         }
 
-        .nav-folder .folder-toggle {
+        .nav-folder .badge {
             margin-left: auto;
-            font-size: 0.7rem;
-            transition: transform 0.2s;
+            background: var(--bg-tertiary);
+            padding: 2px 8px;
+            border-radius: 10px;
+            font-size: 0.75rem;
+            font-family: 'JetBrains Mono', monospace;
         }
 
-        .nav-folder.expanded .folder-toggle {
-            transform: rotate(90deg);
-        }
 
         .nav-folder-children {
             display: none;
@@ -970,6 +970,7 @@
         .section-card-content {
             padding: 18px;
             line-height: 1.8;
+            font-size: 0.9rem;
         }
 
         /* Section Card Color Variants */
@@ -998,7 +999,7 @@
             border-left: 3px solid var(--accent-cyan);
         }
 
-        /* Content inside section cards */
+        /* Content inside section cards - 폰트 사이즈 통일 */
         .section-card-content h3 {
             color: var(--accent-purple);
             font-size: 0.95rem;
@@ -1020,6 +1021,7 @@
             margin-bottom: 8px;
             color: var(--text-secondary);
             line-height: 1.7;
+            font-size: 0.9rem;
         }
 
         .section-card-content li ul, .section-card-content li ol {
@@ -1030,11 +1032,13 @@
         .section-card-content strong {
             color: var(--accent-orange);
             font-weight: 600;
+            font-size: inherit;
         }
 
         .section-card-content p {
             margin: 10px 0;
             color: var(--text-secondary);
+            font-size: 0.9rem;
         }
 
         .section-card-content blockquote {
@@ -2366,22 +2370,48 @@
         let isServerConnected = false;
 
         // ==================== 파일명 패턴에서 그룹 키 추출 ====================
+        // 프로젝트명 별칭 매핑 (같은 프로젝트의 다른 표기를 통일)
+        const projectAliases = {
+            'dincum': '딩컴',
+            'dinkum': '딩컴',
+            'ehg': 'Ehg',
+            'sns': 'Sns',
+            'palm': 'Palm',
+        };
+
+        // 프로젝트명 대소문자 통일 함수 (첫 글자 대문자, 나머지 소문자)
+        function normalizeProjectName(name) {
+            if (!name) return null;
+            const lower = name.toLowerCase();
+            // 별칭 매핑 확인
+            if (projectAliases[lower]) {
+                return projectAliases[lower];
+            }
+            return lower.charAt(0).toUpperCase() + lower.slice(1);
+        }
+
         const groupingPatterns = {
             'S2_meeting': {
                 // yymmdd S2_[프로젝트명].txt
                 pattern: /S2_(.+?)\.txt$/i,
                 getGroupKey: (filename) => {
                     const match = filename.match(/S2_(.+?)\.txt$/i);
-                    return match ? match[1] : null;
+                    return match ? normalizeProjectName(match[1]) : null;
                 },
                 label: '프로젝트'
             },
             'MR_meeting': {
-                // yymmdd [프로젝트명]_킥오프_[유형].txt
-                pattern: /(\w+)_킥오프/,
+                // yymmdd [프로젝트명]_[유형].txt 또는 yymmdd_[프로젝트명]_[유형].txt
+                pattern: /^\d{6}[_\s]+([A-Za-z가-힣]+)/,
                 getGroupKey: (filename) => {
-                    const match = filename.match(/(\w+)_킥오프/);
-                    return match ? match[1] : null;
+                    // 날짜(6자리) 다음 공백 또는 언더스코어 후 첫 번째 프로젝트명 추출
+                    const match = filename.match(/^\d{6}[_\s]+([A-Za-z가-힣]+)/);
+                    if (match) {
+                        return normalizeProjectName(match[1]);
+                    }
+                    // 킥오프 패턴도 지원
+                    const kickoffMatch = filename.match(/([A-Za-z가-힣]+)_킥오프/);
+                    return kickoffMatch ? normalizeProjectName(kickoffMatch[1]) : null;
                 },
                 label: '프로젝트'
             },
@@ -2696,12 +2726,14 @@
         function renderProjectChart() {
             const chart = document.getElementById('project-chart');
             
-            // 전체 기간 S2 프로젝트별 집계
+            // 전체 기간 S2 프로젝트별 집계 (대소문자 구분 없이 통일)
             const s2Meetings = store.meetings.filter(m => m.folder === 'S2_meeting');
             const projectCounts = {};
             
             s2Meetings.forEach(m => {
-                const project = m.project || '기타';
+                // 대소문자 통일: 첫 글자 대문자, 나머지 소문자
+                const rawProject = m.project || '기타';
+                const project = rawProject === '기타' ? rawProject : normalizeProjectName(rawProject);
                 projectCounts[project] = (projectCounts[project] || 0) + 1;
             });
 
@@ -3182,7 +3214,6 @@
                         <span>📦</span>
                         <span>MR Team</span>
                         <span class="badge">${mrTeamTotalCount}</span>
-                        <span class="folder-toggle">▶</span>
                     </div>
                     <div class="nav-folder-children" id="mr-team-children">
                 `;
@@ -3526,23 +3557,85 @@
             const items = [];
             if (!summary) return items;
 
-            // 액션 아이템/결정 사항/To-Do 패턴 매칭
-            const patterns = [
-                /\[(?:To-Do|TODO|액션|Action)\]\s*(.+)/gi,
-                /\[결정(?:\s*사항)?\]\s*(.+)/gi,
-                /[-*]\s*\[([^\]]+)\]\s*(.+)/g,  // - [담당자] 내용
-                /(?:담당|책임)(?:자)?[:\s]+([^,\n]+)[,\s]+(.+)/gi,
-                /(?:~까지|기한|마감)[:\s]*([^\n]+)/gi
-            ];
+            // Markdown 테이블 파싱 함수
+            function parseMarkdownTable(content) {
+                const tableItems = [];
+                // 테이블 패턴: |로 시작하는 연속된 행
+                const tableMatch = content.match(/(\|.+\|\n)+/g);
+                if (!tableMatch) return null;
+                
+                const tableText = tableMatch[0];
+                const rows = tableText.trim().split('\n').filter(r => r.trim());
+                
+                if (rows.length < 3) return null; // 최소 헤더 + 구분선 + 데이터 1행
+                
+                // 구분선 확인 (두 번째 행이 |---|---|---| 형태)
+                if (!rows[1].match(/^\|[\s-:|]+\|$/)) return null;
+                
+                // 헤더 파싱 (열 이름 확인)
+                const headers = rows[0].split('|').filter(c => c.trim()).map(c => c.trim());
+                
+                // 데이터 행 파싱 (3번째 행부터)
+                rows.slice(2).forEach((row, idx) => {
+                    const cells = row.split('|').filter(c => c.trim()).map(c => c.trim());
+                    if (cells.length >= 2) {
+                        // 담당자와 항목 조합하여 텍스트 생성
+                        let text = '';
+                        if (headers.includes('담당자') || headers.includes('담당')) {
+                            const assigneeIdx = headers.findIndex(h => h.includes('담당'));
+                            const taskIdx = headers.findIndex(h => h.includes('항목') || h.includes('내용') || h.includes('업무'));
+                            const deadlineIdx = headers.findIndex(h => h.includes('기한') || h.includes('마감') || h.includes('일정'));
+                            
+                            const assignee = assigneeIdx >= 0 ? cells[assigneeIdx] : '';
+                            const task = taskIdx >= 0 ? cells[taskIdx] : cells[1] || '';
+                            const deadline = deadlineIdx >= 0 ? cells[deadlineIdx] : '';
+                            
+                            text = assignee ? `[${assignee}] ${task}` : task;
+                            if (deadline && deadline !== 'TBD') {
+                                text += ` (${deadline})`;
+                            }
+                        } else {
+                            // 헤더에 담당자가 없으면 모든 셀 합치기
+                            text = cells.join(' - ');
+                        }
+                        
+                        if (text && text.length > 3) {
+                            tableItems.push({
+                                id: `${meetingDate}_tbl_${idx}_${text.substring(0, 20)}`,
+                                text: text,
+                                source: meetingTitle,
+                                date: meetingDate,
+                                status: 'pending'
+                            });
+                        }
+                    }
+                });
+                
+                return tableItems.length > 0 ? tableItems : null;
+            }
 
             // 섹션 기반 추출 (결정 사항 및 액션 아이템 섹션)
             const sectionPattern = /##\s*(?:\d+\.\s*)?(?:결정\s*사항|액션\s*아이템|Action\s*Items?|To-?Do|F\/U)[^\n]*\n([\s\S]*?)(?=##|$)/gi;
             let sectionMatch;
             while ((sectionMatch = sectionPattern.exec(summary)) !== null) {
                 const sectionContent = sectionMatch[1];
+                
+                // 먼저 테이블 형식인지 확인
+                const tableItems = parseMarkdownTable(sectionContent);
+                if (tableItems) {
+                    items.push(...tableItems);
+                    continue;
+                }
+                
+                // 테이블이 아니면 기존 라인 기반 추출
                 const lines = sectionContent.split('\n').filter(l => l.trim());
                 
                 lines.forEach((line, idx) => {
+                    // 테이블 행 무시 (|로 시작하거나 구분선)
+                    if (line.trim().startsWith('|') || line.match(/^[-:|]+$/)) {
+                        return;
+                    }
+                    
                     const cleanLine = line.replace(/^[-*•]\s*/, '').trim();
                     if (cleanLine && cleanLine.length > 5 && !cleanLine.startsWith('#')) {
                         items.push({
@@ -3896,11 +3989,14 @@
             // 로딩 표시
             const loadingId = addLoadingMessage();
 
+            // 업무일지 데이터 가져오기
+            const worklogData = getWorklogData();
+
             try {
                 const response = await fetch(`${API_BASE}/api/chat`, {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ query })
+                    body: JSON.stringify({ query, worklog: worklogData })
                 });
 
                 removeLoadingMessage(loadingId);

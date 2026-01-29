@@ -6,7 +6,15 @@ uvicorn==0.27.0
 
 # Claude AI
 anthropic==0.18.1
+httpx>=0.25.0
 
 # File handling
 python-multipart==0.0.6
 aiofiles==23.2.1
+
+# Environment
+python-dotenv>=1.0.0
+
+# Vector Search (Semantic Search)
+sentence-transformers>=2.2.0
+numpy>=1.20.0

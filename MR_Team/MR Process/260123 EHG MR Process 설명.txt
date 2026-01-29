@@ -1,0 +1,567 @@
+요약
+
+### Meeting Purpose
+
+Krafton HQ team provided comprehensive training on the company's Milestone Review Process to the Project Rustfire (Last Epoch 2) development team. The session covered the process framework, timeline expectations, deliverables requirements, and specific guidance for the upcoming kickoff milestone. 
+
+### Milestone Review Process Overview
+
+- **Core Purpose**: Validate project viability and allocate company resources (tangible and intangible) through stakeholder alignment at key development stages
+- **Decision Framework**: Uses RAPID methodology where Project PD owns the plan, HQ experts provide input, and CEO makes final approval decisions
+- **Key Principle**: Stakeholders are expected to disagree - CEO will choose direction after hearing all perspectives, not seeking consensus
+- **Flexibility**: Milestones and timelines can adjust as projects evolve; teams should not feel overly constrained by previous commitments
+
+### Development Stages
+
+- **Project Kickoff**: Converts studio prototype to official project with approved budget and deliverables
+- **Gameplay Validation**: Iterative stage focused on proving core fun factor and product competitiveness; typically does not advance until core gameplay loop is complete
+- **Business Readiness**: Focus shifts to business viability, market strategy, and detailed production planning; publishing team takes larger role
+- **Typical Timeline**: 1.5-2 years between major stages based on historical projects; milestone reviews occur every 3-6 months depending on project needs
+
+### Process Changes (Version 2.0)
+
+- **Advance Feedback**: Input and expectation opinions now shared with Project PD before the meeting, allowing time to assess and respond
+- **Strategic Alignment**: Meeting becomes collaborative discussion rather than defensive presentation
+- **Draft Submission**: First deliverable draft due 4 weeks before meeting, giving input providers adequate review time
+
+### Milestone Review Schedule
+
+- **T-10 weeks**: Gather with S2 team to identify required inputs; compile list for CEO approval
+- **T-4 weeks**: Submit build and deliverable draft (does not need to be final, but must contain enough information for thorough assessment)
+- **T-3 weeks**: Q&A session between dev team and input providers to align on project understanding
+- **T-2 weeks**: Receive inputs and expectation opinions
+- **T-1 week**: Submit final deliverables
+- **D-Day**: Present to CEO at milestone review meeting
+- **Post-meeting**: CEO decision typically communicated within 10 days
+
+### Deliverable Requirements
+
+Four key pillars must be included:  
+
+**Project Overview**
+
+- Core experience description
+- Development strategy
+- Budget requirements
+
+**Expectations**
+
+- Sales targets (worst case, base case, best case)
+- Unique objectives and key validation factors
+- Rationale for accepting or countering HQ feedback
+
+**Milestone Plan**
+
+- Key validation factors with clear methodology for proving the game is fun
+- Validation methods (focus groups, internal tests, closed alphas, external mock reviews, etc.)
+
+**Schedule**
+
+- Tentative schedule for all future milestones through launch
+- Next milestone review date must be confirmed/hard fixed
+
+### Input Categories
+
+**Game Review (Key Success Factors)**:  
+
+- Build review from three distinct teams with varying perspectives
+- In-depth tech review (critical for Rustfire due to engine migration)
+- User test results
+- Data-driven user expectations from community feedback
+
+**Hurdle Assessment (Essential Risks)**:  
+
+- Team sentiment and confidence surveys
+- Dev team execution capability (plan vs. actual results tracking)
+- Leadership management and labor risks
+- Intangible resource assessment
+
+**Market Context**:  
+
+- S2 and creative advisor opinions
+- IR team analysis for shareholder value alignment
+- Corporate development division input on investment rationale (for acquired studios)
+
+### Creative Advisor Role
+
+- Park (company founder) serves as sole creative advisor with 20+ years industry experience
+- Focus on positive feedback and constructive solutions rather than negative critique
+- Available for consultation outside formal milestone process if needed
+
+### Possible Kickoff Outcomes
+
+Four potential results:  
+
+**Approved**: Project proceeds with approved budget, deliverables, and development plan
+
+**Conditional Approval**: Specific gaps must be addressed (e.g., filling key leadership positions, refining production pipeline, evaluating budget before certain phases)
+
+**Rejected**: Project deemed not ready; CEO declines to proceed with proposal
+
+**Dropped**: CEO determines team performance and project strength do not warrant continued resource investment (historically rare - only 1-2 cases total)
+
+### Project Rustfire Specific Guidance
+
+**Focus Areas**:  
+
+**Sequel Positioning**
+
+- Articulate what is new, what is fixed, what is preserved from Last Epoch 1
+- Address tech debt, server cost burn, combat feel improvements
+- Explain hybrid hero skill system changes
+- Demonstrate futuristic sci-fi aesthetic differentiation from traditional ARPG settings
+
+**Engine Migration Risk**
+
+- Justify Unity to Unreal Engine 5 transition rationale
+- Quantify cost and timeline impact
+- Consider including UE5 tech demo as commitment for next milestone to demonstrate proficiency
+- Address technical stability and performance considerations
+
+**Integration and Changes**
+
+- Document any roadmap changes since acquisition
+- Clarify development delays or direction shifts
+- Report integration difficulties if any
+
+### Cultural Communication Guidance
+
+Important nuances when interpreting CEO feedback:   
+
+- CEO comments are opinions, not directives unless explicitly stated as "must do X"
+- Silence or lack of explicit "no" does not equal approval
+- Team should own decisions rather than assuming CEO casual mentions are mandates
+- Western teams historically misinterpret this dynamic
+
+### Milestone Adjustment Process
+
+- If unavoidable circumstances require timeline changes, use formal adjustment process requiring CEO approval
+- Must align with studio champion before requesting adjustment
+- Process ensures proper record-keeping and prevents penalties for strategic pivots
+- Historical context: Process formalized because projects previously delayed milestones without proper approval
+
+### Evaluation Philosophy
+
+- Project decisions not based on majority vote of input providers
+- Multiple past cases where CEO approved projects despite majority negative feedback
+- CEO considers whether company has expertise to properly assess the genre/market
+- Common negative feedback should be addressed with prepared responses in final deliverable
+
+### Build Submission Guidance
+
+**Philosophy**:  
+
+- Submit elements that cannot be communicated through documents alone
+- Focus on aspects that require interactive experience to evaluate
+- Early/rough builds are acceptable and expected - reviewers understand development stages
+- Gray boxes and temp assets are not penalized
+- For Rustfire specifically: Focus build on demonstrating Unreal Engine 5 technical foundation and capabilities
+
+**Documentation Support**:  
+
+- Can supplement presentation with detailed technical documents, game design docs, architecture structures
+- Additional documentation welcome and will be routed to appropriate experts for assessment
+- Keep presentation deck concise while providing comprehensive supporting materials
+
+### Live Service Discussion
+
+- Milestone Review Process only covers games under development, not live service titles
+- Last Epoch 1 ongoing development funding and strategy requires separate discussion with publishing team
+- Live service requires different input criteria focused on market performance vs. development validation
+
+### Translation Requirements
+
+- All official materials must be translated to Korean
+- Translation is dev team's responsibility; coordinate with HQ translation team in advance
+- Translation services provided for the meeting itself
+
+### Timeline and Next Steps
+
+**Current Planning**:   
+
+- Initial discussion targeted April kickoff; revised to May to allow adequate preparation time
+- May kickoff requires build finalization by end of April
+- Development continues during review process - no work stoppage expected
+
+**Milestone Cadence Guidance**:  
+
+- Kickoff required before exceeding 20 team members
+- HQ approval required before exceeding 50 team members
+- Recommended 3 total milestone reviews for gameplay validation stage: kickoff, team growth milestone, vertical slice
+- Exact timing between milestones flexible based on project needs
+
+### Key Validation Factors
+
+- Limit to 3-5 core validation factors to maintain focus
+- Number of factors signals team priorities to HQ
+- Too many factors raises questions about what the studio considers most critical
+
+### Action Items
+
+- [ ]  Jason to confirm exact date for May kickoff meeting and share formal schedule with exact dates
+- [ ]  Dev team to finalize build by end of April for May kickoff
+- [ ]  Dev team to prepare comprehensive game overview documentation for Rustfire separate from kickoff deck
+- [ ]  Dev team to document Project Rustfire development timeline and duration to date
+- [ ]  Dev team to send Last Epoch 1 materials and documentation to milestone team for input provider context
+- [ ]  Dev team to coordinate with HQ translation team for deliverable translation
+- [ ]  Dev team to prepare production plan showing development strategy and resource requirements
+- [ ]  Dev team to work with finance team on mid-year funding injection aligned with milestone approval
+- [ ]  Dev team to schedule separate discussion with publishing team about Last Epoch 1 live service strategy
+
+메모
+
+받아쓰기
+
+미국에서는 지난 4, 5년 동안 가장 심각한 겨울나기가 있었기 때문입니다. 그래서 모두가 물을 찾으러 나가고, 배터리를 가지고 있는지, 이런 것들을 찾으려고 합니다. 우리는 실제로 일어날 때까지 얼마나 안타까울지 모르잖아요. 그래서 우리는 그냥 손가락을 건너뛰고 있습니다. 하지만 저는 빈이 그것을 할 수 있을 것 같다고 생각합니다. 그러나 아마 그는 여기에 있을 것입니다. 그는 조금 늦게 올 수 있을 것이라고 말했습니다. 그러나 그는 그것을 시도하려고 할 것입니다. 네, 완벽합니다.
+
+여러분이 필요하다면 나중에 여러분과 공유해드리겠습니다. 아, 좋습니다. 훌륭합니다.
+
+지금까지 재택 플러스였습니다.
+
+자, 자세히 살펴봅시다. 오늘은 KCON 프로젝트 러스파이어의 K-POP2 프로젝트에 대해 설명해드리겠습니다. 자, 자세히 살펴보기 전에, 마우스 리뷰 자체의 정체성을 인정하는 것이 중요합니다. 이것은 작업의 핵심 요소입니다. 그리고 이것은 가장 복잡하고 단순한 과정 중 하나입니다. 왜냐하면, 이것은 다양한 기업과 각각의 회원을 포함하고 있습니다. 크래프톤은 모바일 콘솔과 다양한 장르의 플랫폼을 통해 운영하고 있습니다. 프로세스는 이 단순한 차이점을 해결하기 위해 예측하는 느낌을 갖추어 제작되었습니다.
+
+이번 스테이지의 책임자는 여러분입니다. 프로젝트 PD는 개발과 개발 준비를 위한 책임을 담당하고 있습니다. 프로젝트 PD는 CEO와 회의에 참여하고 있습니다. 당신은 자신의 목표를 소유하고 있습니다. 목표는 다음 멀티드 리뷰에서 이뤄질 목표입니다. 예를 들어, 이것은 4D 게임 메커니즘을 실행하는 것과 비슷할 수 있습니다. Unreal Engine 5의 빌드 스티빌리티, 또는 독특한 판매를 진행하는 것과는 조금 더 복잡한 방식입니다. 입력과 예측 프로듀서는 데뷔 및 사업에 있는 HQ 그룹과 개인 전문가들입니다. 그들은 당신의 계획과 빌드를 비판할 것입니다.
+
+2.0 버전의 변화와 마우스터드 리뷰 프로세스에 대해서는 나중에 다뤄 보겠습니다. 회사적인 자원은 탄지적이거나 탄지적이지 않은 자원을 비롯한 공정한 컨셉입니다. 다음 슬라이드에서 더 자세히 살펴보겠습니다. 이러한 목표가 이루어지는 과정은 일부의 과정 중 하나입니다. 하지만 호리스티클리, 크래프트, 마우스터, 뷰는 회사에 대한 자원을 제공하는 결정적인 과정입니다. 회사에 대한 자원은 개발 계획이나 마케팅 계획과 비슷할 수 있겠지만, 또한 개발 리더십 자원이나 데블리팀 센티넌트의 자원과 비슷할 수 있습니다.
+
+멀쩡리뷰의 목표는 제품의 생산 가능성에 대한 게임 플레이를 확인하는 것입니다. 이 과정에서 각 스테이크 홀더가 각 스테이크 홀더에 참여하는 것입니다. 여기에서의 핵심 요소는 선택이 아닙니다. CEO C. H. Kim이 말했듯이, 모두가 동의하지 않는다는 것을 기대하지 않습니다. 스테이크들 사이에서의 의견이 분명히 발표될 것이라고 기대합니다. CEO가 각각의 의견에 대한 방향을 선택할 수 있습니다. 이 페이지의 밑부분을 보시면, 개발이 계속되면서 마우스 리뷰 프로세스의 과정 속도가 변화할 수 있습니다.
+
+우리가 이해하는 것은, 흔들림이 일어나고, 새로운 트렌드가 나타나고, 때로는 첫 번째 아이디어들이 계획대로 나타나지 않는다. 지난 멀쏜 리뷰를 통해 제공받은 목표를 너무 강하게 느끼지 마십시오. 적합한 의견이 있다면, 그리고 당신의 다음 발표 스케줄도 변화할 수 있습니다.
+
+이제 바운선 뷰 프로세스를 살펴봅시다. 바운선 뷰 프로세스는 로지컬 프로그레션으로 개발되어 게임이 개발되거나 생활 서비스로 변경될 때까지 처음의 컨셉과 결론을 바탕으로 시작합니다. 스튜디오의 프로토타입을 공식적인 프로젝트에 변경시키는 것입니다. 프로젝트의 발표를 마치고, 게임 플레이를 진행하는 과정에 들어갑니다. 이 과정은 개발과 개선을 위해 발생할 수 있는 잇러브 스테이지입니다. 이 프로젝트의 핵심은 제품의 재미와 경쟁력을 증명하는 것입니다. 일반적으로 게임 플레이의 핵심이 완료될 때까지 다음 스테이지에 이동하지 않습니다. 프로젝트의 제작 상태는 안정적인 상태로 보입니다.
+
+게임 플레이가 성공적으로 완료되었을 때, 저희는 사업의 완료 단계로 넘어갑니다. 이 시점에서, 제작진은 대부분의 책임을 담고 있습니다. 이 단계도 계속되고 있습니다. 이 단계는 비즈니스 기술력, 시장 전략, 그리고 디테일한 개발 준비를 집중하고 있습니다. 게임 플레이와 비즈니스 마우스턴 리뷰들이 계속되고 있으므로, 이 단계가 얼마나 자주 진행될지 궁금하실 수 있습니다. 안타깝게도 단순한 답변은 프로젝트에 따라 달라집니다. 마우스턴 리뷰를 시작하기 전에 필요한 마우스턴의 숫자가 적지 않습니다. 핵심은 책임자들이 자신의 타임라인을 설정하고 마우스턴 리뷰를 통과합니다.
+
+또는 더 복잡한 것들, 예를 들어 크리에이티브 디렉션이나 프로듀싱 플랫폼의 큰 변화 등이 있습니다. 과거의 경우를 기반으로, 프로젝트의 특정 관점과 특정 관점 사이의 갈등은 1년 반, 2년 반 정도의 시간이 필요합니다. 마우스 연구의 과정은 3, 6개월 이후에 시작됩니다. 이 과정은 초기 접근을 포함하고 있습니다. 질문이 있으신가요? 이러한 회의가 반복되면서 실시간으로 결정될 수 있는 숫자가 몇 개인지에 대한 질문이 떠오릅니다. 또한 누가 책임져야 할지요? 조금 이따가 얘기해 보겠습니다. 첫 번째 계획은 프로젝트 PD가 전체 마을스톤 리뉴스 스케줄을 라우치에 올릴 것입니다.
+
+게임 플레이 밸리데이션 스테이지가 끝나면, 이제는 비즈니스 리드에 들어갑니다. 그리고 스케줄을 정리받아야 합니다. 그의 계획에 맞춰서 조금 더 나아질 수 있기를 바랍니다. 알겠습니다. 그리고 당신이 사업 전문가를 말하는 것입니다. 죄송합니다. 그것은 새로운 단어입니다. 저는 이 상황에서 사업 전문가가 누구인지를 맞추기 위해 노력하고 있습니다. 제가 들었지만, 제작팀은 디비션2에 참여할 것이라고 들었죠? 네, 디비션2에 참여할 것이라고 들었습니다.
+
+지금 저희는 크래프틴과의 협약이 없지만 협약을 하고 있습니다. 크래프틴과의 협약을 앞두고, EHT에 있는 사람인가요?
+
+이러면 그들은 그곳의 비즈니스 리더가 됩니다. 알겠습니다. 알겠습니다. 나중에 디테일 플로우에 대해 얘기해보겠습니다. 알겠습니다. 신선한 아이디어들을 만들어내는 과정입니다. 프로젝트 킥오프의 리캡은 프로젝트 PD가 개최법과 독특한 목표를 설정하는 과정입니다. 프로젝트 KICKOFF은 CEO가 적용한 공식 프로젝트입니다. 여기에는 CEO가 보스턴 뷰에 관한 프로젝트를 결정합니다. 보스턴 뷰에 따른 프로젝트가 여러 가지로 선정되어 있습니다. 금융 영향 등등.
+
+게임플레이 마우스턴 리뷰는 제작과 개발에 집중합니다. 게임플레이의 핵심은 개발에 집중합니다. 이 마우스턴 리뷰는 제작진이 프로젝트의 생산 가능성을 소개합니다. 포스토모듐은 여러 참가자들의 발전 과정에 대한 글쓰기입니다. 포스토모듐은 회사에서 약 1년간의 포스토모듐 프로젝트를 공유합니다.
+
+이제 빠르게 결정하는 과정에 대해 이야기해 보겠습니다. 많은 조사는 프로젝트 PD를 의미합니다. 제 생각에는 프로젝트의 디렉터인가요? 프로젝트 CEO가 프로젝트를 발표할 때는 물론 프로젝트 헤드가 발표할 수도 있습니다. 프로젝트 PD는 다양한 인도분들에게 적용할 수 있는 단어라고요? OK, got it. Whoever is responsible for the process. OK. Project development. Yeah, development. Got it. OK, got it.
+
+랩핏 결정 방식을 사용하였습니다. 부회장님께 감사드립니다. 당신은 프로젝트 PD입니다. 당신은 계획을 소유합니다. 그리고 HQ 전문가들은 인풋과 기대를 제공하는 분야에서 인풋을 제공합니다. 인풋을 받아들일 수 있는지 포기할 수 있는지 결정하시길 바랍니다. 랩핏 프레임워크에서는 챔피언, 알렉스 나운,가 동의해야 합니다.
+
+킥-오프 마우스 로디에는 4가지 결과물이 있습니다. 첫 번째는 당연히 적용입니다. 프로젝트는 CEO가 적용한 방향에 따르면 적용되고, 딜러링 스타렉스, 개발 계획 등으로 제작이 진행됩니다. 두 번째로는 기준적 적용이 필요합니다. 기준적 적용을 통해 계획에 특정한 틈을 정리할 수 있는 경우가 있습니다. 예를 들어, 제작 파이플라인에 특정한 리드 포지션을 제공하는 경우가 있습니다. 프로듀싱 계획을 짧게 만들고, 국회의원금을 평가하기 전에 퇴출 계획을 유지하고 등등이 진행되고 있습니다. 세 번째 결과는 재판입니다. 프로젝트는 준비되지 않은 것으로 보입니다. 그리고 CEO는 제안을 거부합니다.
+
+마지막 결과물은 떨어졌습니다. CEO는 팀의 성능과 프로젝트의 강력성을 평가하고 더 많은 자원을 공급하지 않기로 결정했습니다. 이것이 프로젝트의 끝이라고 생각합니다. 던져지기는 좀 당황스러울 수 있으므로, 예전에는 던져지지 않은 프로젝트가 많았지만, 1-2번 정도는 던져지지 않았습니다.
+
+이제 마우슨 리뷰 리퀘스트 과정으로 넘어가 보겠습니다. 시작 라인에 어떻게 들어가요? S2를 통해 스튜디오들이 마우슨 리뷰 리퀘스트 지원 및 지원 업체들에게 원하는 스케줄 6개월 전까지 리퀘스트 리퀘스트를 보내야 합니다. 프로젝트 PD의 기대와 다음 멀티드 스웨트 뷰의 로드맵을 이끌어낼 것입니다. 최대한 일찍 공개될 수 있도록 디테일하게 공개하고 싶습니다.
+
+자, 이제 스테인드의 뒤쪽으로 돌아가는 기술들을 살펴봅시다. 킥-오프-플로우는 3개의 주요 패러다임이 있습니다. 첫 번째는 입력 준비를 하는 것입니다. 마우스 인터뷰 서포트 오프스와 S2를 모으고, 프로포즈를 만들고, 두 번째로는 H2O의 기대감을 공유하는 것입니다. 프로젝트 PD의 첫번째 제안은 시장 숫자와 같은 목표 발전 성능을 설정할 것입니다. 최악의 경우, 기본적 경우, 최상의 경우, 목표 성능을 제공할 것입니다. Publishing expectation providers will provide their opinions based on your base case launch performance. Additionally, the project PD will also set project's unique objectives or key validation factors.
+
+개발 예측 프로젝트들은 본인의 의견을 제공할 것입니다. 대부분의 킥오프에서는 예측 의견이 프로젝트의 목표를 향상시키는 것입니다. 중요하다고 볼 수 있을 것입니다. kick-off meeting은 D-Day입니다. 프로젝트 PD는 CEO에게 전달이 가능하다고 발표하고 의견과 기대에 대해 논의합니다. 대부분의 경우, CEO의 리뷰 결정은 회의가 종료된 후 10일 만에 공개됩니다. 추가적으로, 글로벌 퍼블리싱의 CGPOS 진오는 프로젝트의 발표를 결정한 후에 프로젝트의 발표를 발표할 예정입니다.
+
+여기서 멈춰봅시다. 질문이 있거나 추가 설명이 필요하다면 댓글로 남겨주세요. 특정 회의를 통해, 결과를 통해 등등.
+
+게임 디자인과 게임 개발 방식에 대한 강력한 의견을 받았습니다. 그들은 여러 번 저에게 말했습니다. 아니, 그렇게 하지 않습니다. 저희는 게임 개발에 관여하지 않습니다. 우리의 역할은 해결책을 추천하는 것입니다. 하지만 게임이 어떻게 연결될지에 대한 최종의 권위는 마지막 버전과 비교해보니 왼쪽 핀 프레임을 사용하는 이유는 왼쪽 핀 프레임을 사용할 때 최소한의 사람을 확인하는 것입니다. 그래서 랩필드 프레임워크를 활용하는 것의 전반적인 목적은 책임감을 잃지 않기 때문입니다. 책임감을 잃지 않기 때문에 책임감을 잃지 않기 때문입니다.
+
+이 차트에는 프로젝트 PD와 동의해야 하는 챔피언이 있습니다. 맞습니까? 이게 무슨 일이 일어날지 모르겠지만, 프로젝트 PD와 챔피언이 동의하지 않는다면, What do you do?
+
+First of all, it's a good question. The main intention we put the champion as a grid is that you guys need to working hard to make alignment. Yep. If we just, put the champion's eye and he can say that he champion can say that, Hey, I told them, but they did not agree with that. without having more conflict between the champion and the studio. That's why we put it in A. But Because we are living in a real world.
+
+In the end, as you mentioned, each other decide not to agree with each other. At that moment, at that moment, champion, we recommend champion to make a document What is happening and why aren't you agree with the studio? So we can clearly see who is responsible for what. So sometimes we... Probably. In some world, Steel could be wrong or Champion could be wrong. But with the documentation, CH can have a sense of That situation.
+
+We try not to cover everything. We try to expose everything. If there's a conflict, just make a document that sends it to us.
+
+That makes sense. That makes sense.
+
+We're pretty easy to work with. We're pretty reasonable.
+
+I don't suspect that that's going to be a situation. But, good one to ask. As we said in the previous purpose and principles, the mouse review process kind of also has like a record keeping purpose as well. Okay. Yeah. It's just to see who's responsible for which aspect and to make a decision based on that. Makes sense. Makes sense. Thank you. Cool. So what's changed from version 1.0? In the old days, the dev teams would walk into the milestone review meeting and hear the feedback for the first time.
+
+and it was rather stressful and inefficient, as you may imagine. Now we share the inputs and expectation opinions with the project PD in advance. This gives you breathing room to assess their feedback. If you see a critique you agree with, you can choose to accept it and update your plan accordingly. If you disagree, you may prepare a rationale for why your path is better. Sharing these materials in advance helps to shorten the actual meeting time, makes the discussion go much smoother.
+
+It turns the meeting into a strategic alignment session rather than a defensive battle. Okay. So as everyone's concerned about the schedule. Oh, wait.
+
+I mean, what's that?
+
+I'll talk about the... No baby. Here, when you actually request for the milestone review, you don't actually submit your build or deliverables. It's just that you... you just set a target date for your mouse or review. I'll talk about it in the schedule of you actually submit your first draft of the deliverable and the build about four weeks out. from our sort of view. So realistically, if you agree with something and you accept their critique, you can put it in, maybe change your roadmap in the final deliverable.
+
+But to implement it in the actual build is a bit, it may be a bit difficult.
+
+Difficult for us or you? We might be willing to do it. We're 11th Hour Games. We can get feedback.
+
+I don't know if you guys knew. About two weeks out from the meeting, if you can put that in the build, I mean... Yeah, yeah.
+
+But yeah, it's a proof. So far, they're having one or two teams willing to change their own materials. But so far, there haven't been any breakthrough changes of the project. So they normally just change some of their proposals. Oh. some of the features, that whole production pipeline needed to renew all documents and all the builds. So maybe it happens. Let's see how we can deal with that.
+
+Okay, so moving on to schedule, here is a brief overview of the milestone review schedule for kickoff. Note that these are schedules of rough estimates calculated backwards based on the milestone review meeting date. Schedule may be subject to change if there are any holidays or extenuating circumstances in between the dates. We will share the actual milestone review schedule with exact dates once we confirm the milestone review meeting date for the project.
+
+Approximately 10 weeks out, we gather once again with the S2 and discuss what inputs we need. We'll talk about once we compile the list of inputs, which we'll talk more about in the appendix, we share the list with the CEO to get his approval. About four weeks before the meeting is your big deadline. As I said, you must share your bill and deliverable draft. It doesn't have to be the final polished version, but it must have enough information for the input and expectation providers to understand the game thoroughly.
+
+Three weeks out, we conduct a Q&A session between the dev team and the input provider so that both parties are on the same page in terms of project knowledge and clear up any potential misconceptions about the project's direction, if there are any. Two weeks before the meeting, we share the inputs and expectation opinions with you. And one week before the meeting, you submit the final deliverance. So D-Day is obviously the milestone review meeting with the CEO and you'll present your deliverable.
+
+We facilitate everything, including arranging translation services for the meeting if needed. However, translating your deliverables is your responsibility and we recommend that you coordinate with the HQ translation team in advance. While probably not applicable for this kickoff in particular for Rustfire, if you plan on doing a user test like a focus group test or a company-wide internal test, The S2 must discuss this with the user test team at least 10 weeks before the D-Day to check their availability and start off the test planning process.
+
+Any questions about the schedule? Looks great.
+
+Is there any situation where we would not translate our deliverables or I assume the answer is always translate them because there will always be someone who is not an English speaker, but just so I'm gut checking. Thanks.
+
+Official material has to be in Korean. So, uh, yeah. So translate. Got it. This case, everything's going to be translated. Sorry about that. But we have a very good translation team, so you guys should be fine. Okay, so what actually goes into your deck? Firstly, I would like to preface this by saying that we do not have a specific template or restrict how you present your own deck. However, there are some requirements that need to be included in your deliverable that can be divided into four key pillars.
+
+First is the project overview. The obvious stuff, the core experience, the development strategy, and the budget. Second is your expectations, your sales target, unique objectives, and your rationale for accepting or countering HQ's feedback. Third is the milestone plan. You must list your key valuation factors and how are you going to prove the game is fun? What tools and procedures are you going to use?
+
+Lastly, the schedule. You provide a tentative schedule or soft fix for milestone reviews all the way up to launch. However, the date for your next milestone review must be confirmed or hard fixed. To elaborate a bit more on the milestone plan, we want to see the development specs and a clear method for validating the core fund. Don't just tell us it's fun, tell us how you'll prove it's fun. Your validation method could be in the form of focus group tests, internal tests, closed alphas, external mock reviews, and so on.
+
+The question is on the slide. Good. Okay, finally, let's talk specifically about Project Rustfire. I would also like to preface this by saying that these are merely suggestions and comments based on how the previous milestone reviews went and the CEO's comments. How to handle the deliverables direction is entirely up to the project PD, and abiding by or rejecting these suggestions neither guarantees nor disqualifies the project from passing the milestone review.
+
+So this is just for your reference. and is optional. Because "Rustfire" is a sequel to "Last Epoch," the CEO's expectations may be a bit different from an entirely new project. As a result, it may be best to focus on the new value: what and how are you fixing from last epoch 1? For example, the tech debt, the server cost burn, improving the combat field, or improving skill VFX or sound effects. How does the hybrid hero skill system change the game?
+
+How does the new futuristic sci-fi era look and feel compared to the traditional gritty fantasy ARPG settings? The second big thing is the engine migration. We've heard that you guys are moving from Unity to enter Engine 5, which is a massive technical risk. There will likely be many questions about why you are making this pivot. What is the impact of cost in our end use case? It may also be beneficial to have a tech demo in Unreal Engine 5 as a commitment for your next milestone to show proficiency for the new engine.
+
+Third is any roadmap changes since the acquisition? Have there been any delays or major changes in development direction? Has there been any difficulties with integration? That's all I need to say. So this is your chance to lead the narrative. If the engine migration is the biggest hurdle, Owning it and making a commitment may be a good way to turn a risk into a problem. So now we'll stop here. If you have any questions regarding this, comments or suggestions, let us know.
+
+I don't really have any questions on this. I'm excited to get into it. Like I'm excited to actually do this. So I think these are great suggestions.
+
+We normally just give you a suggestion based on the history rather than just insisting because we cannot guarantee that CH will like it or not. We just told you guys what kind of question has been arrived from CH with similar cases on the sequel or RPG or some sort of those kinds of things. We normally have a monthly meeting with S2 and normally speak to them Those kinds of questions could be arise.
+
+That makes sense. Yes. Yes. I guarantee he'll like it. We're not fortune tellers. We just learned from history. For sure. For sure. Okay, now let's move on to some sample documents and additional information that may be useful for Project Rustfire Okay, so this is what a gameplay expectation opinion generally looks like. Note that the DevExpert focuses specifically on the project PD's commitment to key validation factors.
+
+They provide a rating from these changes to positive for each major Dev goal. When you see a slightly negative or need changes, do not panic. Use the version 2.0 prep window to build a response instead. If the feedback reads "S strategic depth is lacking", your representation may want to focus on the new skill trees that address exactly that point. As you can see here, we do gather expectation providers' opinions on whether the project should proceed with major or minor changes or be dropped altogether.
+
+However, as we mentioned at the beginning, when we explain the purpose and principles of the process, the project's go/no-go decision is solely up to the CEO, and these opinions are just that: opinions. A project is not automatically dropped just because more than half the expectation providers gave a negative feedback. Their input represents opinions rather than decisions, and the outcome is not determined by scoring or majority consensus.
+
+Any questions about this one? No?
+
+To add on what Kevin said, there were several cases, even though as you mentioned, more than half of them choose negative, but CH says yes, is there's two cases. One is for the injury. At the moment, a lot of people say that this is negative compared to the things, but what CH mentioned at that time is that there is no one in this company just too good at verifying this sort of game. So just let it out to the streamer.
+
+and the people see what is going to happen. That is the first time that exactly those kinds of cases happen. And the second time is maybe It is not a good case, but the Kizna, literally a year and a half ago, One of the PUBG team comes up with the anime style mobile game. And during the kickoff meeting, CH had the same question, "Is there anyone else in this company can successfully analyze this type of game?" And he said, "Maybe not.
+
+We just put it on the other publisher in Japan." And so the purpose of the MySleep, you haven't changed. Hey, get a yes sign from the outside publisher. So CH is at the same time, CH is trying to think about how can we verify this game? How can you verify this genre? Because we are making so different genre and so different platform and so different market. CH also need to think about what is the best way to analyze and make the assessment of the game.
+
+So that is why we need so many opinions for CH to spin it about this circumstance. Lucky for us, KS, we have personally met many, many very hardcore RPG fans inside Crown. There's definitely going to be people here that know the genre and are willing to assess it. There are many, I can guarantee that.
+
+A lot of people chasing the shinies. Absolutely. Good on them.
+
+One more tip is that if Many of them say that no. Many of them say that's why they're negative. Even though you're not agree to your idea, it would be nice to look into it and have a great answer for that because That is something CH always give a question.
+
+Yeah, as I've mentioned previously, if there are a lot of same common feedback, critique about a specific aspect of the game, it may be best to prepare maybe a response slide in your final deliver. Absolutely.
+
+In this document you're showing, are we limited to only three core validation factors or can we have more than three?
+
+You can have more. Just don't have like... More than five. Okay. Yeah. Okay. It's a... It's not like a constraint on us. A lot of the expectation providers are very busy people.
+
+Also, the the item that you put on this document will show what is your priority. So if there are too many, Sure. In HQ, a lot of people say, "What is the priority of your studio?" So those kinds of questions could be asked. It would be nice to focus on critical features or critical items to have an assessment on.
+
+Yeah, from past cases, about three to four, maybe perhaps five is the sweet spot. Got it. Okay, quickly, we're just going to go over the slide. For reference, these are the general classifications for the detailed inputs that will follow on the next slide. Okay, so that's a long slide. Now, let's go through the specific inputs that you will encounter. While every project is obviously different, we have a set of common inputs that the CEO uses to assess the validity of a project's status.
+
+I'll break these down by category so you understand the logic we're applying. First one is the game review category or the key success factor. We have the build review and user test results. For the build review, we don't just rely on one person, we use three distinct teams that and who play your build and provide detail assessment with varying perspectives. For a project like Rustfire, the in-depth tech review is perhaps your most critical game.
+
+There's a deep dive into your technical execution capabilities, focusing on aspects such as technical stability, performance, and multiplayer functionality. We also look at data driven user expectations where we use big data, probably Metacritic, YouTube, Discord comments or store reviews to see what the RPG community is actually saying about the genre right now. Second is the hurdle category, concerned with essential risks.
+
+We look at the intangible resources, that team sentiment and that team confidence. We conduct surveys to measure the team's morale and energy, which we consider a limited but essential resource. And we check if the developers actually find their own game fun and engaging to work at. We also assess Dev Team's execution capability, which is truly objective look at your plan versus actual results. If you set a commitment at kickoff to have a synthetic system ready by the next mouse or review and it isn't there yet, that is recorded here.
+
+This category also covers leadership management and labor risks, ensuring the studio and PD have the appropriate track record and that there are no operational deal breakers that could affect the organization. The third category includes subjective opinions and market context. We have the S2 and creative advisors opinions. These are subjective expert level critiques both through development capabilities as well as your project's progress.
+
+And since we are a publicly traded company, we also consider the impact of mid to long term stock price. Our IR team analyzes whether your project aligns with the shareholders' values such as target launch performance or portfolio diversity. And to add here, specific to ESG as an acquired studio, we may also include an input from the corporate development division, or deal team. They will provide the investment rationale commenting on why Krafton signed the deal and whether the current production plan still tracks against those original expectations.
+
+So there's a lot of digest here. Do you have any questions about the inputs? One new term is popping up here, the creative advisor. Do we have a creative advisor? Yeah. Wait, did Amy actually... I don't think he's in the org chart anymore, but, uh, Park is. One of the founders of of this company. He is our creative advisor and he gives opinions on all the projects that are subject to Maltese.
+
+He has been in this industry more than 20 years and has a lot of experience in game design. And he's also director of the Ternop, one of the biggest IP we used to have. Not anymore. We still have it, but service is ahead. And he was the creative director of the Ternop. So... Actually, he's totally free man. He's financially totally free man.
+
+All right, all right. Have him come over and talk to us at some point, I guess.
+
+But CH asked him to help him because he has a lot of people, he has a lot of experience in watching development team and the product, in multiple products, not just in company, but also in this industry in Korea. So he has numerous experience on how to make the game, how the creative goes on, something like that. So that's why he's the only creative advisor in this company so far. Nice, nice.
+
+Okay. Yeah, just to add to that, usually when he gives his opinions on maybe the production and such, he usually focuses on the positives and how to make it better. He's not a very negative person. So I... rarely seen him give like a negative opinion. He tries to come up with solutions rather than, you know. When would we be introduced to him? At what stage within development?
+
+Normally, normally... During the milestone review process, the Q&A session will be introduced. But if you have any interest before, if you have a specific agenda to think about what game designers send to Prague, you can just give it to us and we send it to him so that you guys can have a meeting about it. Cool.
+
+Okay, thank you. No. Well, last slide. Finally, let's talk about the milestone adjustment process. If something breaks, use this process. Do not wait until the next formal review to tell us the date is possible. If you request a milestone adjustment due to unavoidable circumstances or pivots, the CEO will evaluate the validity. Just make sure that you align with your studio champion as to before requesting an adjustment.
+
+Prompt alignment on project direction is essential to ensure a successful launch. This keeps the record-keeping function of the loss-review intact and ensures you are not penalized for pivots that were either out of your hands or strategically sound. So yeah, if something doesn't work or there are some issues with perhaps maybe like hiring or such, you can request a change in your next mouse or view date.
+
+Any questions about this line? Pretty straightforward, but...
+
+Would this also be when we, if we get feedback and we decide to pivot, Like you were saying, like the initial feedback you gave us, this would be our process. In that case, yes.
+
+We've never had it happen, but if someone's opinion was really game-changing and you were like, "We gotta implement this right now and do the monster review," then you could probably use this. Okay. So why we have a separate process for the adjustment is just to give you guys a kind of history lesson in a sense, anecdotal thing, is that a lot of projects just kind of like wave the master review off willy-nilly for months at an end.
+
+So yeah, we had to come up with an actual process that requires CEO approval. to change the day. No problem. Got it. Okay, appreciate you guys running through the slides there. That's great. I have a couple of questions if we're moving on to Q&A.
+
+Mm-hmm. Um...
+
+My biggest question for this entire meeting is trying to understand what the date and deliverables of the first, I guess, kickoff meeting or whatever comes after this meeting is, right? I think you had a slide on it where we talked about some recommendations, but at the end of that recommendation, it was just build. And do we ever get any more understanding of what the expectations might be for what is in the build in this first kickoff?
+
+It is totally up to dev team, but my recommendation would be since Sage was developer, too much the wrong people in my sleeve is supporting of having experiencing as a developer. So just don't worry too much about primitive build might be give you a wrong assessment with it. Yeah, that's what an early builder is. The creative advisor knew about it. So my normal recommendation, what kind of thing need to be in the build is that there is something, always something we cannot deliver with the word.
+
+we cannot deliver with the document, especially the action game. So Those kinds of elements. So build is one of the ways to present your intention. So those things can be covered with a document. You can just put it on the document. It doesn't need to be in the build. But if there is something, all it can be seen with the build, I recommend you to put in the build. And as a developer, we always knew that it's better to have a build rather than having like 200 pages of the document.
+
+Sometimes. So in this sense, it's totally up to the app team which element need to be getting to the build. Yeah. Okay.
+
+Now, Just to create a scenario to get the information I'm looking for. If we went away and said, okay, well, we think the first build should be an entire run through of the first chapter of the game with all the dialogue and all of the, and we're going to be, we're going to see you in two years. I'm sure you would say, no, no, no, that's not okay. Because what? Because there's a rule somewhere about the schedule or what do we break there?
+
+I think it's totally up to headcount and the budget. For example, you need to just like a The reason why we separate the monthly views by the My Soul Review is they try to decide the bunch of money to be invested. So if he's coming up to say, "Hey, we need two years, just investing a whole lot of money at this decision point." Sage could say that, "Hey, let's verify some of the other factors which is not in the build currently." And then, decide to invest more.
+
+So this is kind of business page rather than a homework. You can just split it, what to propose and what to get invested and just slice up to the mySony, you buy mySony deal. That's my recommendation.
+
+Okay, so on that note, in terms of our finances for a studio right now, because we are... If throw investing money into last epoch two, as well as extending our, our runway to LA Orbus, we are in need of a cash injection for funding for the project. And that'll happen probably halfway through the year or three quarters of the way through the year. I'm working with the finance team on that right now.
+
+But I bring that up to say, if, if the funding injection is tied to the milestone review process, then we're motivated to get our, our next, I guess, waiting too long.
+
+That's correct. That's exactly what is working along with the finance and the HR team. We normally say that you just put every number on the, like, all year. but They already knew that the US needs to have mySolid approval to full access to those money. Other systems have the same thing.
+
+A lot of past cases where the CEO agenda for the mouse was approval on the development budget. That's one of the most common ones. Okay. Roughly, you know, if we're aiming to have this game released late 2031 at this point, roughly how many milestone reviews should we aim to have? Should we aim to have this like major milestones, like we've gone vertical slice and now we're all the way at alpha, which might be a multi-year gap?
+
+Should we try to do it every six months? What kind of cadence do we look for here? Yeah.
+
+It is a thing. It's totally up to the development team how to plan it out. But if I just quickly, in my head to set it up is that we normally having a huddle about the dev team, number of dev team members. So before Before over than 20, you need to have a kickoff meeting. Before getting over 50, you need to get approval from the HQ. So those two is kind of straight line to when you need to have my sole view.
+
+And other than that,Oh. I think having a true... Including kickoff, having three mice to review would be enough for the gameplay validation stage. One is for the kickoff, second thing is for overall 50, third thing is to vertical slice. Okay.
+
+Okay. Another question is, we're talking a lot about Rustfire right now. We have had kind of loose conversation about the ongoing development of Last Epoch 1. For the ongoing development of Last Epoch 1, when do we... you know, pitch what we're trying to do with that product, the duration of it, how much funding goes towards that.
+
+That's a good question. Since my celebrity process only covers the game, it's under development. which is not in life. So last step one is already on the live stage. So it is more of a business decision. So it needs to be discussed with the publishing perspective because Under development, there is a certain thing we can count on, but in the live service side, when it goes to market, The input needs to be totally changed.
+
+That's why we only covered the underdevelopment stage. Those kinds of things need to be discussed with the other publishing members.
+
+So if I'm thinking of this correctly, we need to schedule our kickoff ideally sooner than later. Last time we had loose discussion on this. We're going to see if we might be able to do that around April. Bords, does that sound roughly correct? Around April?
+
+That's... That gives me what I need on the finance side.
+
+Okay. Then comes vertical slice. Vertical slice, it is up to us when we schedule that. And we would schedule that based off of, do we believe that this is presenting the correct information that would convince HQ that we are making something worth continuing investment in? But there is not a, it needs to happen within... six months, 12 months, 18 months, but like somewhere in there. Is that correct?
+
+Yeah. Okay.
+
+Is there any objection from the Milestone team if we were to try to schedule this kickoff in April? Is that too soon?
+
+It's a little bit too soon, but I think we can make it, but I recommend you to having May because We have no my Philippine domain.
+
+May is also fine with me.
+
+May works financially? Yeah. Okay.
+
+One more thing, as you can see on the shared document, you have to submit the the build a month before. So even if the schedule is May, it could be, the deadline could be assumed for April for the studio. So yeah. Okay. I guess that's correct. Okay.
+
+So May with a build finalizing in end of April. Let's add to that a lot of the studios kind of like get a little bit hung up on the fact that you have to submit the bill four weeks before and you know what happens with development in the meantime. Just give your brief answers. Just continue with the model. Don't stop at each one.
+
+Yeah, I'm glad you said that because there's no other real answer for the studio. We have to continue development, but I appreciate the alignment.
+
+Yeah, with a game like this where there's so much systematic foundation that you have to set up to support a game like this for the long term, live service, continued content, everything that goes into this, very systems heavy. Cool. Creating a proper foundation for this type of game takes a long time. So if we are to supply a build... that's ready by April. I don't suspect that the build is, you know, luckily, CH understands early development, but what comes out at that time, Might not be super...
+
+polished for sure, but it's certainly not going to be representative of what the final product would be by kickoff. Vertical slice, that's when we would aim to have a representative slice.
+
+Yeah, I totally understand that. And striking distance, even submitting the Take care. meeting build is kind of clumsy.
+
+I mean, yeah, we're not going to penalize you for having gray boxes or using 10 assets. It really depends on what you're trying to prove with that build and what you're trying to explain with that build.
+
+So I do understand why developers have been kind of scared of showing the very, very early stage build, but I do understand that. Whatever you expected, We've seen worse. We've seen worse.
+
+Sure, sure, sure, sure. Yeah, I mean, what will happen is I will show up to that call and I will talk mostly about the foundations that we've set up in the engine to set us up for success of content development for the next one, two, three, four years there. But what you're actually able to play, like, well, you know, you guys understand. You guys understand. Yeah.
+
+Okay. You guys already show us, you guys know about game design, how to make the game. I think some of the questions might be good to answer during the kickoff meeting is that the Unreal Engine things. So I think you can just fully focus on Unreal Engine about the build. Yes. With the build, what kind of thing, the technical plan do you guys have? And we tried to try something with this permanent build in tech side.
+
+So we think it is a good way to approach it or not, something like that. Inside the bill.
+
+Oh, go ahead, Jeff. that we of course can't fit onto a slide deck. Has there been times where we go and we say, this is what our model for networking in the game is, the multiplayer, the networking, the server stuff, and actually provide a full-on document that is five pages long so, you know, individually, separately, they can go and assess that document and see the work that has been done there that, of course, I can't really show on a slide deck?
+
+Or would you rather just say like... Here's the slide. This is what we're doing. Here's the four bullet points. Just to quickly answer that question, because it gives you the detailed answer. The reason why we call the material deliverable instead of the presentation deck is exactly because of that. You can provide other development documents, technical documents, architecture structures, it doesn't matter.
+
+You can just give it all and we'll assess accordingly. Just make sure that the presentation deck isn't way too long. Yes, yes, yes. That's really about it.
+
+Also, I think John just gave a great question. If you guys are giving us a bunch of game design documents or technical documents, if we think it's worth to have our eyes on it, we try to find anyone in this HQ who can assess it and try to get paper from them and show it to the CH. For example, about the only RAM can or If some of them is worried in HQ side, we need to have assessment with them. If you guys give us a paper, there's no reason why for us to not seeing it.
+
+Okay, great. Yep, we'll give you guys lots of stuff at that point then. But yes, we'll keep the presentation nice and tight. The more information, the better.
+
+Yep. Does the Milestone review team currently have an understanding of when we started development with Project Rustifier? Like how long we've been working on it?
+
+We only kind of like met you guys when we went to California like last year, last April. And I've heard that the production plan has shifted since then. So we're not exactly sure.
+
+Okay. So we should probably prepare something to show, you know, because when we say here's where we are, I'm sure a natural question is how long does it take to get to here? So we should figure that out.
+
+Yeah, that'll be part of your production plan that should be included.
+
+Also, if you guys have any kind of document to let other people know of the Lost Fire, just send it over to us. We just distribute among the input people so that they can have sense about what is your game, so that they can prepare for your project. Playing Lost, but one more or anything else. They normally play the game before or try to find the document or any articles about the game so that they can correctly give you guys input.
+
+More information is always welcome.
+
+At least one of the good things about this is that all the build review teams have participated in the investment part.
+
+They know your game pretty well.
+
+Nice. Good. Yes, making a nice tight deck that shows what Rust Fire is, what the goals are, what systems we're going to put in place. It's something that I want to do. you know, currently going through pre-production and planning all that stuff and documenting it very well. I imagine, um, probably why Certainly by the kickoff meeting, I'll be able to construct a deck that is shows the game overview that I can have separate from what the kickoff deck needs to show as well.
+
+And I think one of the biggest things We need to, you guys need to have alignment with the HPA, the CEO during the kickoff meeting is that What is overall strategy? I mean, product strategy. What kind of master EPUB 1 need to be better to to get in number two position or number one position. Art, who is game design, who is lighting service. What kind of thing need to be get improved? to have more sales on it.
+
+I think that is specifically the alignment we need to have. For example, whenever we have the C-polls, that is the kind of question. What needs to be changed? What needs to be improved? What needs to be preserved? Those three elements normally pop up whenever we talk about the SQLs. So I think that's a big framework. The company, HQ and the studio need to get in line with.
+
+Yes, that makes absolute sense.
+
+Rule three or something like that. Rule three or something like that.
+
+the familiar, the new, Proof of evidence. I'll be back. Thank you.
+
+Okay. Fantastic. Yeah, one tip I can give you. I always give you guys tips about the CH.
+
+Yeah, yeah. Give us all the CH tips you got.
+
+We are living in different cultures. It's a cultural difference.
+
+Yes.
+
+Whenever CH... give you a kind of comment It is just opinion. Right. And it's totally up to you to take it or not. So, something happened. Ever since I joined this company like seven years ago, a lot of Western people I have a misunderstanding about him. He didn't say no. He did nothing normally during the meeting. It did not mean he said yes. It means he did not say no. When you're gauging his feedback, if he explicitly says that you must do X, that's obviously you have to do it.
+
+But when he just comments on a certain feature, it doesn't mean that you have to immediately jump up.
+
+Actually, I told Justin multiple times that See you guys. choose to Allela Engine because because CH mentioned about the Allela Engine or they you guys have totally believer of the change to the Allela Engine 5 is good because I saw this kind of cases multiple times CH just mentioned without seriously thinking or seriously think about hey you guys need to be changed he just spit it out and just people react with that yes three years later CH mentioned that hey that was you who decision to shift it.
+
+It was like-just for your own knowledge, I think it was like an input factor that when we came to you guys and the acquisition happened and we knew that many games that you guys were developing were under Unreal and some of the desires that were very clear for the last Epoch IP was like graphic fidelity improving and animations improving. Unreal Engine does offer a lot of things that we really are lacking in Unity right now, and in course does make the Unity Last Epoch project feel like there's a lower fidelity than Path of Exile 2 Diablo 4 at the moment.
+
+And so legitimately, moving over was like a... We feel like we need to do it. Ripping off that bandaid is going to hurt. But I think the fact that there was talk about Unreal and how you guys are mostly an Unreal studio did give us more... I wouldn't say pressure, but drive to go in that direction.
+
+Yeah, but actually At the moment, we just like to check on what are your thoughts about Unity and Unreal Engine. But it is not about the push because we actually... I'm in positive side that you guys just keep insisting you guys gonna keep it in Unity. because it means that your self reflection is pretty good. In tech side, that's what I thought at the moment. A lot of people within my team the same way because we have been seeing a lot of students happy and fail to change UE5 because As you mentioned, there's a lot of features in UE5 to have great graphic fidelity.
+
+Yes.
+
+Performance. A lot of them...
+
+A lot of that is not playable.
+
+Yes, yes. Performance... Yeah. So one leg up that we have there is that even in unity with last epoch one, we have gone through immense pain in terms of performance because we structured that incorrectly. Um, and, um, You know, early on when we were a small team, there really wasn't a lot of talk about performance. There wasn't like, how do we set this up so we can have lots of actors on the screen?
+
+How do we set this up so there's low latency between, you know, the server and the... We really weren't having those types of conversations. Now that we've experienced the pain... The word performance is is like every three sentences we talk about this. So as we are going through Unreal and we're working with these other agencies that are very talented in Unreal, it is certainly something that If we get performance wrong, with Rust Fire initially.
+
+It will be due to the engine just not allowing it, period. Because we are doing our due diligence to make sure that performance is very, very good. That's really good to hear because we have a lot of kick Take off to gameplay. It should stay product that just say we're just gonna make it nice and then we're gonna Work on the performance later and then never yeah.
+
+Yeah. Yeah. Yeah No, we we have we have gone through the immense pain retroactively trying to make something performance We're still going through it. I mean honestly with last year one. We're still kind of fighting that battle We're winning the battle now, but it was it was hard We will not go through that pain retroactively again Well, great, guys. I mean, this provided me a lot of clarity. I really appreciate you guys going through it at this level.
+
+The tips that you guys are giving are great. The cultural differences and how the responses are and the feedback and stuff like that, any time that you guys see that or notice that feedback is being given to us or really anything that you feel like we might not know the cultural nuance, you're probably right. And honestly, I would appreciate you guys reaching out and be like, hey, that actually means this while we adapt and start to understand it ourselves.
+
+Right now, I mean, we don't, to be clear. Yeah.
+
+But yeah, I mean, this was great.
+
+He's American? Perfect. Perfect. Perfect. Reaching out to camp me whenever you have a confusion.
+
+I mean, if you open up everything to Justin, I mean, he'll probably tap us if something like that comes up. Yeah, cool.
+
+Should be open to you guys, if that's us.
+
+Okay, so in terms of next steps, it sounds like we're targeting loosely made. Who is responsible for setting the date? And then I guess we are responsible for deciding what's going to go into that.
+
+Jason helps us. Is that right?
+
+Yeah, so I could hop in and come up with an exact date. I'll double check with you guys whether if you guys are going to be free at that exact date and so on. So yeah, I'll be hopping in.
+
+Okay. Okay, fantastic.
+
+Sorry, Jason, I think I called you Justin. I was not familiar with your English name.
+
+I was wondering who Justin would be.
+
+I think after the second or third time you said it, we were like, all right, context-wise, we understand. Yes.
+
+Actually, for the formal project me and Alex went through, we actually told the studio leaders a lot of times about the nuance of Koreans and like Alex is actually a very expert of understanding the CH nuance. Okay, that's good. Yeah, it's going to be very helpful on the way. Right, right. Great.
+
+All right, guys. Well, that's exciting. We're energized. What we're cooking is exciting. I'm excited to share more information about what we have going on here. And yeah, we'll go through this process and we'll tap you if you have any follow-up questions.
+
+Oh, the deck that you shared today, is that the same or different than the deck I got from you about four or five months ago? Should we get a new copy?
+
+Four or five months. I gave you guys the exact same deck on the meeting invitation. Okay, great. Yeah. Okay.
+
+Thanks so much. Thank you.

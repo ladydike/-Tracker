@@ -14,6 +14,24 @@ from typing import List, Dict, Optional
 from dataclasses import dataclass, asdict
 from collections import defaultdict
 
+# 벡터 검색용 라이브러리
+import numpy as np
+from sentence_transformers import SentenceTransformer
+
+# .env 파일 직접 로드
+ENV_PATH = Path(r"C:\Users\lenachoi\.cursor\Practice\.env")
+if ENV_PATH.exists():
+    with open(ENV_PATH, 'r', encoding='utf-8') as f:
+        for line in f:
+            line = line.strip()
+            if line and not line.startswith('#') and '=' in line:
+                key, value = line.split('=', 1)
+                os.environ[key.strip()] = value.strip()
+    print(f"[ENV] Loaded from: {ENV_PATH}")
+    print(f"[ENV] API Key exists: {bool(os.environ.get('ANTHROPIC_API_KEY'))}")
+else:
+    print(f"[ENV] Warning: {ENV_PATH} not found")
+
 from fastapi import FastAPI, HTTPException, UploadFile, File
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.staticfiles import StaticFiles
@@ -26,6 +44,16 @@ import uvicorn
 PRACTICE_DIR = Path(r"C:\Users\lenachoi\.cursor\Practice")
 CLAUDE_MODEL = "claude-sonnet-4-20250514"  # 최신 모델로 업데이트
 ANTHROPIC_API_URL = "https://api.anthropic.com/v1/messages"
+CONTEXT_FILE = PRACTICE_DIR / "context_조직정보.md"
+
+# 조직 배경 정보 로드
+org_context = ""
+if CONTEXT_FILE.exists():
+    with open(CONTEXT_FILE, 'r', encoding='utf-8') as f:
+        org_context = f.read()
+    print(f"[Context] 조직 정보 로드 완료: {CONTEXT_FILE.name}")
+else:
+    print(f"[Context] 조직 정보 파일 없음: {CONTEXT_FILE}")
 
 # Initialize FastAPI
 app = FastAPI(title="MileStone Tracker API", version="1.1.0")
@@ -38,6 +66,85 @@ app.add_middleware(
     allow_methods=["*"],
     allow_headers=["*"],
 )
+
+# ==================== Vector Search 설정 ====================
+print("[Vector Search] 임베딩 모델 로딩 중... (처음 실행 시 다운로드 필요)")
+embedding_model = SentenceTransformer('paraphrase-multilingual-MiniLM-L12-v2')  # 다국어 지원 모델
+print("[Vector Search] 임베딩 모델 로드 완료!")
+
+# 벡터 저장소 (메모리)
+vector_store = {
+    "ids": [],
+    "embeddings": None,  # numpy array
+}
+
+def init_vector_db():
+    """벡터 저장소 초기화"""
+    global vector_store
+    vector_store = {"ids": [], "embeddings": None}
+    print("[Vector Search] 저장소 초기화 완료")
+
+def vectorize_meetings():
+    """모든 회의록을 벡터화하여 저장"""
+    global vector_store
+    
+    if not store.meetings:
+        print("[Vector Search] 벡터화할 회의록이 없습니다")
+        return
+    
+    print(f"[Vector Search] {len(store.meetings)}개 회의록 벡터화 시작...")
+    
+    documents = []
+    ids = []
+    
+    for meeting_id, meeting in store.meetings.items():
+        # 요약본이 있으면 요약본, 없으면 원본 앞부분
+        text = meeting.summary_content if meeting.summary_content else meeting.content[:3000]
+        # 제목도 포함하여 검색 정확도 향상
+        combined_text = f"제목: {meeting.title}\n폴더: {meeting.folder}\n내용: {text}"
+        
+        documents.append(combined_text)
+        ids.append(meeting_id)
+    
+    # 배치로 임베딩 생성
+    embeddings = embedding_model.encode(documents, show_progress_bar=True)
+    
+    vector_store["ids"] = ids
+    vector_store["embeddings"] = embeddings
+    
+    print(f"[Vector Search] {len(documents)}개 회의록 벡터화 완료!")
+
+def semantic_search(query: str, n_results: int = 10) -> List[tuple]:
+    """의미 기반 벡터 검색 (코사인 유사도)"""
+    if vector_store["embeddings"] is None or len(vector_store["ids"]) == 0:
+        return []
+    
+    # 쿼리 임베딩 생성
+    query_embedding = embedding_model.encode([query])[0]
+    
+    # 코사인 유사도 계산
+    embeddings = vector_store["embeddings"]
+    # 정규화
+    query_norm = query_embedding / np.linalg.norm(query_embedding)
+    embeddings_norm = embeddings / np.linalg.norm(embeddings, axis=1, keepdims=True)
+    
+    # 유사도 계산
+    similarities = np.dot(embeddings_norm, query_norm)
+    
+    # 상위 N개 인덱스
+    top_indices = np.argsort(similarities)[::-1][:n_results]
+    
+    # 결과 매핑
+    search_results = []
+    for idx in top_indices:
+        meeting_id = vector_store["ids"][idx]
+        if meeting_id in store.meetings:
+            meeting = store.meetings[meeting_id]
+            score = float(similarities[idx]) * 100  # 0~100 점수
+            if score > 20:  # 최소 유사도 임계값
+                search_results.append((meeting, score, ["semantic"]))
+    
+    return search_results
 
 # ==================== Data Models ====================
 @dataclass
@@ -206,6 +313,9 @@ def load_meetings_from_directory():
 @app.on_event("startup")
 async def startup_event():
     load_meetings_from_directory()
+    # 벡터 DB 초기화 및 회의록 벡터화
+    init_vector_db()
+    vectorize_meetings()
 
 @app.get("/")
 async def root():
@@ -214,6 +324,9 @@ async def root():
 @app.get("/api/sync")
 async def sync_meetings():
     load_meetings_from_directory()
+    # 벡터 DB도 재생성
+    init_vector_db()
+    vectorize_meetings()
     return {"status": "success", "count": len(store.meetings)}
 
 @app.get("/api/meetings")
@@ -350,28 +463,112 @@ def search_meetings(query: str, max_results: int = 10) -> List[tuple]:
     
     return scored_meetings[:max_results]
 
+def search_worklog(query: str, worklog_data: dict, max_results: int = 5) -> List[dict]:
+    """업무일지 검색 - 키워드 매칭"""
+    if not worklog_data:
+        return []
+    
+    query_lower = query.lower()
+    keywords = [kw.strip() for kw in query_lower.split() if len(kw.strip()) >= 2]
+    
+    scored_worklogs = []
+    
+    for date_str, day_data in worklog_data.items():
+        items = day_data.get('items', [])
+        memo = day_data.get('memo', '')
+        
+        # 검색 대상 텍스트 구성
+        items_text = ' '.join([item.get('content', '') for item in items]).lower()
+        memo_lower = memo.lower() if memo else ''
+        search_text = f"{items_text} {memo_lower}"
+        
+        if not search_text.strip():
+            continue
+        
+        score = 0
+        for kw in keywords:
+            if kw in search_text:
+                score += search_text.count(kw) * 2
+        
+        # 정확한 구문 매칭 보너스
+        if query_lower in search_text:
+            score += 10
+        
+        if score > 0:
+            scored_worklogs.append({
+                'date': date_str,
+                'items': items,
+                'memo': memo,
+                'score': score
+            })
+    
+    # 점수순 정렬
+    scored_worklogs.sort(key=lambda x: -x['score'])
+    return scored_worklogs[:max_results]
+
 @app.post("/api/chat")
 async def chat(request: dict):
     query = request.get("query", "")
+    worklog_data = request.get("worklog", {})  # 업무일지 데이터 받기
     api_key = os.environ.get("ANTHROPIC_API_KEY")
     if not api_key:
         return {"answer": "ANTHROPIC_API_KEY가 설정되지 않았습니다.", "sources": []}
     
-    # 관련 회의록 검색 (결과 수 확대)
-    search_results = search_meetings(query, max_results=10)
+    # 1. 키워드 검색
+    keyword_results = search_meetings(query, max_results=7)
     
-    if not search_results:
-        return {"answer": "관련된 회의록을 찾지 못했습니다. 다른 키워드로 검색해보세요.", "sources": []}
+    # 2. 의미 기반 벡터 검색
+    semantic_results = semantic_search(query, n_results=7)
+    print(f"[검색] 키워드: {len(keyword_results)}개, 시맨틱: {len(semantic_results)}개")
+    
+    # 3. 결과 병합 (중복 제거, 점수 합산)
+    combined_scores = {}
+    for meeting, score, kws in keyword_results:
+        combined_scores[meeting.id] = {
+            'meeting': meeting,
+            'keyword_score': score,
+            'semantic_score': 0,
+            'matched': kws
+        }
+    
+    for meeting, score, kws in semantic_results:
+        if meeting.id in combined_scores:
+            combined_scores[meeting.id]['semantic_score'] = score
+        else:
+            combined_scores[meeting.id] = {
+                'meeting': meeting,
+                'keyword_score': 0,
+                'semantic_score': score,
+                'matched': kws
+            }
+    
+    # 4. 최종 점수 계산 (키워드 60% + 시맨틱 40%)
+    search_results = []
+    for mid, data in combined_scores.items():
+        final_score = data['keyword_score'] * 0.6 + data['semantic_score'] * 0.4
+        search_results.append((data['meeting'], final_score, data['matched']))
+    
+    # 점수순 정렬
+    search_results.sort(key=lambda x: -x[1])
+    search_results = search_results[:10]  # 상위 10개
+    
+    # 업무일지 검색
+    worklog_results = search_worklog(query, worklog_data, max_results=5)
+    
+    if not search_results and not worklog_results:
+        return {"answer": "관련된 회의록이나 업무일지를 찾지 못했습니다. 다른 키워드로 검색해보세요.", "sources": []}
     
     # 컨텍스트 구성
     context_parts = []
     sources = []
     
+    # 회의록 컨텍스트
     for meeting, score, matched_kw in search_results:
         # 요약본이 있으면 요약본 우선, 없으면 원본 일부
         content_to_use = meeting.summary_content if meeting.summary_content else meeting.content[:2000]
         
         context_parts.append(f"""
+[문서 유형: 회의록]
 [문서 ID: {meeting.id}]
 [제목: {meeting.title}]
 [날짜: {meeting.date}]
@@ -384,28 +581,60 @@ async def chat(request: dict):
             "title": meeting.title, 
             "date": meeting.date,
             "folder": meeting.folder,
+            "type": "meeting",
             "relevance": score
         })
+    
+    # 업무일지 컨텍스트
+    for wl in worklog_results:
+        items_text = '\n'.join([f"- [{item.get('status', 'pending')}] {item.get('content', '')}" for item in wl['items']])
+        memo_text = wl['memo'] if wl['memo'] else '(메모 없음)'
+        
+        context_parts.append(f"""
+[문서 유형: 업무일지]
+[날짜: {wl['date']}]
+---
+📋 업무 항목:
+{items_text if items_text else '(업무 항목 없음)'}
 
-    system_prompt = """당신은 회의록 분석 전문가 AI 어시스턴트입니다.
+📝 메모:
+{memo_text}
+""")
+        sources.append({
+            "id": f"worklog_{wl['date']}", 
+            "title": f"업무일지 ({wl['date']})", 
+            "date": wl['date'],
+            "folder": "업무일지",
+            "type": "worklog",
+            "relevance": wl['score']
+        })
 
-주어진 회의록 컨텍스트를 바탕으로 사용자의 질문에 정확하게 답변하세요.
+    # 조직 배경 정보 포함
+    org_info_section = f"""
+## 📋 조직 배경 정보 (참고용)
+{org_context}
+""" if org_context else ""
 
+    system_prompt = f"""당신은 회의록 및 업무일지 분석 전문가 AI 어시스턴트입니다.
+
+주어진 회의록과 업무일지 컨텍스트를 바탕으로 사용자의 질문에 정확하게 답변하세요.
+{org_info_section}
 **⚠️ 필수 규칙 (반드시 준수):**
-1. 반드시 제공된 회의록 내용만을 기반으로 답변하세요.
+1. 반드시 제공된 회의록/업무일지 내용만을 기반으로 답변하세요.
 2. **[출처 명시 필수]** 모든 정보에는 반드시 출처를 명시하세요!
-   - 형식: **(출처: [회의 제목], [날짜])**
-   - 예시: "해저 케이블은 전 세계 인터넷을 연결합니다. **(출처: 260113_게임톡, 2026-01-13)**"
-3. **[답변 마지막에 참고 회의록 목록 필수]** 답변 끝에 반드시 아래 형식으로 참고한 회의록을 나열하세요:
+   - 회의록: **(출처: [회의 제목], [날짜])**
+   - 업무일지: **(출처: 업무일지, [날짜])**
+3. **[답변 마지막에 참고 자료 목록 필수]** 답변 끝에 반드시 아래 형식으로 참고한 자료를 나열하세요:
    ---
-   📌 **참고 회의록:**
+   📌 **참고 자료:**
    - [회의 제목] (날짜, 폴더)
-   - [회의 제목] (날짜, 폴더)
-4. 여러 회의록에서 정보가 있다면 각각의 출처를 개별적으로 표시하세요.
-5. 제공된 컨텍스트에 없는 내용은 "관련 정보가 회의록에 없습니다"라고 명확히 알려주세요.
-6. 답변은 한국어로 작성하세요."""
+   - 업무일지 (날짜)
+4. 여러 문서에서 정보가 있다면 각각의 출처를 개별적으로 표시하세요.
+5. 제공된 컨텍스트에 없는 내용은 "관련 정보가 없습니다"라고 명확히 알려주세요.
+6. 답변은 한국어로 작성하세요.
+7. 조직 배경 정보를 활용하여 용어, 프로젝트명, 프로세스를 정확히 이해하고 답변하세요."""
 
-    user_prompt = f"""아래는 검색된 회의록입니다:
+    user_prompt = f"""아래는 검색된 회의록과 업무일지입니다:
 
 {"="*50}
 {chr(10).join(context_parts)}
@@ -413,8 +642,8 @@ async def chat(request: dict):
 
 질문: {query}
 
-위 회의록 내용을 바탕으로 답변해주세요. 
-⚠️ 중요: 모든 정보에 출처를 명시하고, 답변 마지막에 반드시 "📌 참고 회의록:" 목록을 포함하세요!"""
+위 내용을 바탕으로 답변해주세요. 
+⚠️ 중요: 모든 정보에 출처를 명시하고, 답변 마지막에 반드시 "📌 참고 자료:" 목록을 포함하세요!"""
 
     async with httpx.AsyncClient(timeout=90.0) as client:
         try:
