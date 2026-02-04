@@ -685,5 +685,53 @@ async def chat(request: dict):
             print(f"Chat API Error: {str(e)}")
             return {"answer": f"오류 발생: {str(e)}", "sources": []}
 
+def find_available_port(preferred_port=8000, max_attempts=10):
+    """
+    ⚠️ 포트 설정 규칙 (절대 변경 금지):
+    - Milestone Tracker: 8000
+    - Money Advisor: 8020  
+    - Money Manage: 8030
+    """
+    """사용 가능한 포트를 자동으로 찾습니다."""
+    import socket
+    
+    for offset in range(max_attempts):
+        port = preferred_port + offset
+        try:
+            with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
+                s.bind(('127.0.0.1', port))
+                return port
+        except OSError:
+            print(f"[포트 {port}] 이미 사용 중, 다음 포트 시도...")
+            continue
+    
+    raise RuntimeError(f"사용 가능한 포트를 찾을 수 없습니다 ({preferred_port}-{preferred_port + max_attempts - 1})")
+
+
+def open_browser_delayed(port, delay=3):
+    """서버 시작 후 브라우저에서 localhost로 엽니다."""
+    import threading
+    import webbrowser
+    import time
+    
+    def open_browser():
+        time.sleep(delay)
+        webbrowser.open(f"http://localhost:{port}")
+    
+    thread = threading.Thread(target=open_browser)
+    thread.daemon = True
+    thread.start()
+
+
 if __name__ == "__main__":
-    uvicorn.run(app, host="0.0.0.0", port=8000)
+    port = find_available_port(preferred_port=8000)
+    html_path = PRACTICE_DIR / "milestone_tracker.html"
+    
+    print(f"\n{'='*50}")
+    print(f"  Milestone Tracker 서버 시작: http://localhost:{port}")
+    print(f"  임베딩 모델 로드 중... (첫 실행 시 약 30초, 이후 빠름)")
+    print(f"  이 창을 닫으면 서버가 종료됩니다.")
+    print(f"{'='*50}\n")
+    
+    open_browser_delayed(port)
+    uvicorn.run(app, host="0.0.0.0", port=port)
